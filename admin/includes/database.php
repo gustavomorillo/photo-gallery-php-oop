@@ -1,6 +1,6 @@
 <?php
 
-require_once("new_config.php");
+//require_once("new_config.php");
 
 class Database {
 
@@ -18,8 +18,15 @@ class Database {
 		//if(mysqli_connect_errno()){
 		//	die("Database connection failed" . mysqli_error());
 		//}
+
+		$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 		
-		$this->connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+		$server = $url["host"];
+		$username = $url["user"];
+		$password = $url["pass"];
+		$db = substr($url["path"], 1);
+	
+		$this->connection = new mysqli($server, $username, $password, $db);
 
 		if($this->connection->connect_errno){
 			die("Database connection failed" . $this->connection->connect_error);
