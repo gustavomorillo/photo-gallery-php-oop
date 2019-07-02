@@ -1,0 +1,6089 @@
+       
+
+
+configure  service 
+vprn 10077 customer 1
+interface "PTSVAL01_1_3/1_4_GINAV_V2"
+shutdown
+sap lag-30:66
+shutdown
+exit
+no sap lag-30:66
+exit
+no interface "PTSVAL01_1_3/1_4_GINAV_V2"
+
+
+
+
+
+CONFIGURACION INICIAL------------------------------
+
+        vprn 10327 customer 1 create
+            router-id 10.19.11.128
+            autonomous-system 6306
+            route-distinguisher 6306:10056
+            auto-bind mpls
+            vrf-target target:6306:10056
+            interface "PTSVAL01_1_3/1_4_GINAV_V2" create
+                address 10.18.108.121/30
+                bfd 300 receive 300 multiplier 3
+                sap lag-30:66 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                export "Default-Ori-to-OSPF"
+                ignore-dn-bit
+                area 0.0.0.2
+                    interface "PTSVAL01_1_3/1_4_GINAV_V2"
+                        bfd-enable 
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "GI_NAV_V2"
+            no shutdown
+
+
+CONFIGURACION INICIAL-------------------------
+
+
+            vprn 10077 customer 1 create
+            description "Gi-Navegantes Interface VAL"
+            vrf-import "Import_3G-Gi-NAVE-VAL-10246"
+            vrf-export "Export_3G-Gi-NAVEGANTES-VAL"
+            autonomous-system 6306
+            route-distinguisher 6306:10013
+            auto-bind mpls
+            vrf-target target:6306:10013
+            interface "to_PS93VAL01_3/0/6-Vlan283-Gi-Na" create
+                description "PED77VAL01_3/1/2-PS93VAL01_3/0/6_vlan283-Gi-Navegantes"
+                address 10.53.189.141/30
+                sap 3/1/2:283 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan276-Gi-Na" create
+                description "PED77VAL01_8/1/2-PS93VAL02_3/0/7_vlan276-Gi-Navegantes"
+                address 10.53.189.73/30
+                sap 8/1/2:276 create
+                exit
+            exit
+            interface "PTSVAL01_1_3/1_4_GISERV_V2" create
+                address 10.18.108.125/30
+                bfd 300 receive 300 multiplier 3
+                sap lag-30:67 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                ignore-dn-bit
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan283-Gi-Na"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan276-Gi-Na"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown   
+                    exit
+                exit
+                area 0.0.0.2
+                    interface "PTSVAL01_1_3/1_4_GISERV_V2"
+                        bfd-enable 
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "Gi-3G"
+            no shutdown
+        exit
+
+
+
+         policy-statement "MPBGP_Direct-to-OSPF"
+                entry 10
+                    from
+                        protocol bgp-vpn
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                    exit
+                exit
+            exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+            LOG
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            LOG
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            loG
+
+
+
+
+
+
+
+
+
+            
+A:PED77VAL01# 
+A:PED77VAL01# configure  service 
+A:PED77VAL01>config>service# vprn 10077 customer 1 
+A:PED77VAL01>config>service>vprn# interface "PTSVAL01_1_3/1_4_GINAV_V2"
+A:PED77VAL01>config>service>vprn>if# shutdown 
+*A:PED77VAL01>config>service>vprn>if# sap lag-30:66 
+*A:PED77VAL01>config>service>vprn>if>sap# shutdown 
+*A:PED77VAL01>config>service>vprn>if>sap# exit 
+*A:PED77VAL01>config>service>vprn>if# no sap lag-30:66 
+*A:PED77VAL01>config>service>vprn>if# exit 
+*A:PED77VAL01>config>service>vprn# 
+*A:PED77VAL01>config>service>vprn# exit 
+*A:PED77VAL01>config>service# exit 
+*A:PED77VAL01# configure service 
+*A:PED77VAL01>config>service# vp
+vpls  vprn
+*A:PED77VAL01>config>service# vprn 
+                                   ^
+Error: Missing parameter
+*A:PED77VAL01>config>service# vprn 10077 
+*A:PED77VAL01>config>service>vprn# no interface "PTSVAL01_1_3/1_4_GINAV_V2"
+*A:PED77VAL01>config>service>vprn# exit 
+*A:PED77VAL01>config>service# exit 
+*A:PED77VAL01# 
+*A:PED77VAL01# 
+*A:PED77VAL01# admin display-config 
+# TiMOS-C-10.0.R4 cpm/hops ALCATEL SR 7750 Copyright (c) 2000-2012 Alcatel-Lucent.
+# All rights reserved. All use subject to applicable license agreements.
+# Built on Sun Jul 29 19:38:22 PDT 2012 by builder in /rel10.0/b1/R4/panos/main
+
+# Generated TUE MAY 28 06:50:40 2019 UTC
+
+exit all
+configure
+#--------------------------------------------------
+echo "System Configuration"
+#--------------------------------------------------
+    system
+        name "PED77VAL01"
+        chassis-mode c
+        enable-icmp-vse
+        snmp
+            packet-size 9216
+        exit
+        time
+            ntp
+                server 10.19.11.120
+                no shutdown
+            exit
+            sntp
+                shutdown
+            exit
+            dst-zone VENST
+                start first sunday january 00:00
+                end first sunday january 00:00
+            exit
+            zone AST 
+        exit
+        thresholds
+            rmon
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "System Security Configuration"
+#--------------------------------------------------
+    system
+        security
+            telnet-server
+            ftp-server
+            password
+                authentication-order tacplus local radius 
+                minimum-length 8
+                attempts 10 time 5 lockout 10
+            exit
+            tacplus
+                accounting
+                authorization
+                server 1 address 10.19.19.19 secret "DBYT.1bIeOFeCI91ROH5wpQ5RkAyI9Bz" hash2
+                server 2 address 10.19.69.9 secret "DBYT.1bIeOF2G0rbQFfAmWN5ZWPGY7EQ" hash2
+            exit                      
+            user "D31431"
+                password "gYLp77AKXN3iGiERNpmzPU" hash2
+                access console ftp 
+                console
+                    no member "default"
+                    member "administrative"
+                exit
+            exit
+            user "admin"
+                password "BB1LjG4VxsvceNBr0JVKz." hash2
+                access console ftp 
+                console
+                    member "administrative"
+                exit
+            exit
+            user "soportealu"
+                password "3dehoryT9SP/rMw.kvqBNMxPWDw9iR.m" hash2
+                access console ftp 
+                console
+                    member "default"
+                    member "administrative"
+                exit
+            exit
+            snmp
+                community "5BnxK2P1bpqbeUY8TEKakU" hash2 rwa version both
+                community "tsoYslV8g9nNw6rk/sNfUU" hash2 rwa version both
+            exit
+            ssh
+                preserve-key
+            exit
+            per-peer-queuing
+            cpu-protection
+                policy 1 create
+                exit
+                policy 254 create
+                exit
+                policy 255 create
+                exit
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "System Login Control Configuration"
+#--------------------------------------------------
+    system
+        login-control
+            ssh
+                inbound-max-sessions 10
+                outbound-max-sessions 10
+            exit
+            idle-timeout 10
+            pre-login-message "AVISO: para acceder a este sistema necesita estar previamente autorizado, estando usted estrictamente limitado al uso indicado en dicha autorizacion. El acceso no autorizado a este sistema o el uso indebido del mismo esta prohibido y es contrario a la legislacion vigente. El uso que realice de este sistema esta siendo monitoreado."
+            motd text "AVISO: ha accedido a un sistema propiedad de Telefonica Venezolana, C.A. Necesita tener autorizacion antes de usarlo, estando usted estrictamente limitado al uso indicado en dicha autorizacion. El acceso no autorizado a este sistema o el uso indebido del mismo estan prohibidos y es contrario a la Politica Corporativa de Seguridad y a la legislacion vigente. Si usted revela informacion interna de Telefonica Venezolana, C.A. o de sus clientes sin previa autorizacion podra estar incurriendo en una violacion de la Normativa Corporativa, que podria incluso suponer la posible comision de un delito o falta."
+        exit
+    exit                              
+#--------------------------------------------------
+echo "Log Configuration"
+#--------------------------------------------------
+    log 
+        file-id 10 
+            description "LOG-GESTION"
+            location cf3: 
+            rollover 1440 retention 24 
+        exit 
+        filter 10 
+            default-action drop
+            description "SNMP FILTER GESTION"
+            entry 10 
+                action forward
+                match
+                    application eq "snmp"
+                exit 
+            exit 
+        exit 
+        event-control "igmp" 2005 suppress
+        event-control "video" 2009 suppress
+        event-control "video" 2010 suppress
+        snmp-trap-group 98
+            description "5620sam"
+            trap-target "10.53.80.33:162" address 10.53.80.33 snmpv2c notify-community "T3Vipbb15trap98"
+            trap-target "10.53.80.34:162" address 10.53.80.34 snmpv2c notify-community "T3Vipbb15trap98"
+        exit 
+        log-id 10 
+            description "LOG-GESTION"
+            filter 10 
+            time-format local
+            from main 
+            to file 10
+        exit 
+        log-id 98 
+            from main security change 
+            to snmp 1024
+        exit 
+    exit 
+#--------------------------------------------------
+echo "Filter Match lists Configuration"
+#--------------------------------------------------
+    filter 
+        match-list
+            ip-prefix-list "Filtro_Datos_Moviles_Destino_1" create
+                prefix 10.16.55.70/32
+                prefix 10.18.127.13/32
+                prefix 10.18.253.93/32
+                prefix 200.71.185.5/32
+            exit
+            ip-prefix-list "Filtro_Datos_Moviles_Destino_2" create
+                prefix 10.18.0.0/16
+                prefix 10.19.0.0/16
+                prefix 200.35.68.0/24
+                prefix 200.35.96.0/24 
+                prefix 200.71.152.0/24
+            exit
+            ip-prefix-list "access-list-1" create
+                prefix 10.18.161.8/32
+                prefix 10.18.161.11/32
+                prefix 10.18.161.165/32
+                prefix 10.18.161.181/32
+                prefix 10.18.161.182/32
+                prefix 10.18.161.190/32
+                prefix 10.18.176.150/32
+                prefix 10.18.190.1/32
+                prefix 10.18.190.2/32
+                prefix 10.18.190.3/32
+                prefix 10.19.19.2/32
+                prefix 10.19.19.3/32
+                prefix 10.19.19.5/32
+                prefix 10.19.69.5/32
+                prefix 10.160.68.51/32
+                prefix 10.160.75.36/32
+                prefix 10.160.75.58/32
+                prefix 10.164.3.74/32
+                prefix 172.31.150.121/32
+                prefix 172.31.171.13/32
+                prefix 192.168.59.47/32
+                prefix 192.168.59.48/32
+                prefix 192.168.59.117/32
+                prefix 192.168.59.148/32
+            exit
+        exit
+    exit 
+#--------------------------------------------------
+echo "System Security Cpm Hw Filters and PKI Configuration"
+#--------------------------------------------------
+    system
+        security
+        exit
+    exit
+#--------------------------------------------------
+echo "QoS Policy Configuration"
+#--------------------------------------------------
+    qos
+        network-queue "CORE-PED_Network_Queue" create
+            description "CORE-PED network queue QoS policy"
+            queue 1 create
+                mbs 50
+                high-prio-only 10
+            exit
+            queue 2 create
+            exit
+            queue 3 create
+            exit
+            queue 4 expedite create
+            exit
+            queue 5 expedite create
+            exit                      
+            queue 6 expedite create
+            exit
+            queue 7 expedite create
+            exit
+            queue 8 expedite create
+            exit
+            queue 9 multipoint create
+                mbs 50
+                high-prio-only 10
+            exit
+            fc af create
+                multicast-queue 9
+                queue 3
+                egress-hsmda
+                    queue 3
+                exit
+            exit
+            fc be create
+                multicast-queue 9
+                queue 1
+                egress-hsmda
+                    queue 1
+                exit
+            exit
+            fc ef create
+                multicast-queue 9
+                queue 6
+                egress-hsmda
+                    queue 6
+                exit
+            exit
+            fc h1 create
+                multicast-queue 9
+                queue 7
+                egress-hsmda
+                    queue 7
+                exit
+            exit
+            fc h2 create
+                multicast-queue 9
+                queue 5
+                egress-hsmda
+                    queue 5
+                exit
+            exit
+            fc l1 create
+                multicast-queue 9
+                queue 4
+                egress-hsmda
+                    queue 4
+                exit
+            exit
+            fc l2 create
+                multicast-queue 9
+                queue 2               
+                egress-hsmda
+                    queue 2
+                exit
+            exit
+            fc nc create
+                multicast-queue 9
+                queue 8
+                egress-hsmda
+                    queue 8
+                exit
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "Card Configuration"
+#--------------------------------------------------
+    card 1
+        card-type imm48-1gb-sfp-b
+        mda 1
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown
+        exit
+        mda 2
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown
+        exit
+        no shutdown
+    exit
+    card 3
+        card-type imm-2pac-fp3
+        mda 1
+            mda-type p10-10g-sfp
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown
+        exit
+        mda 2
+            mda-type p10-10g-sfp
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown               
+        exit
+        no shutdown
+    exit
+    card 8
+        card-type imm-2pac-fp3
+        mda 1
+            mda-type p10-10g-sfp
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown
+        exit
+        mda 2
+            mda-type p10-10g-sfp
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown
+        exit
+        no shutdown
+    exit
+    card 10
+        card-type imm48-1gb-sfp-b
+        mda 1
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown
+        exit
+        mda 2
+            network
+                ingress
+                    queue-policy "CORE-PED_Network_Queue"
+                exit
+            exit
+            no shutdown
+        exit
+        no shutdown
+    exit
+#--------------------------------------------------
+echo "Port Configuration"
+#--------------------------------------------------
+    port 1/1/1
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/2
+        shutdown                      
+        ethernet
+        exit
+    exit
+    port 1/1/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/4
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/5
+        description "Expansion RNCs Huawei 05May17"
+        ethernet
+            mode access
+            no autonegotiate
+        exit
+        no shutdown
+    exit
+    port 1/1/6
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/7
+        description "Expansion RNCs Huawei 05May17"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/1/8
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/9
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/10
+        shutdown
+        description "Reservado PaCo Huawei_15_11_12"
+        ethernet
+        exit
+    exit
+    port 1/1/11
+        shutdown
+        description "Reservado PaCo Huawei_15_11_12"
+        ethernet
+        exit
+    exit                              
+    port 1/1/12
+        shutdown
+        description "Reservado PaCo Huawei_15_11_12"
+        ethernet
+        exit
+    exit
+    port 1/1/13
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/14
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/15
+        shutdown
+        description "Expansion_IuPs_RNCVAL01_19_08_2016"
+        ethernet
+        exit
+    exit
+    port 1/1/16
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/17
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/18
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/19
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/20
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/21
+        shutdown
+        description "Expansion_IuPs_RNCVAL01_19_08_2016"
+        ethernet
+        exit
+    exit
+    port 1/1/22
+        shutdown                      
+        ethernet
+        exit
+    exit
+    port 1/1/23
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/1/24
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/1
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/2
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/4
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/5
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/6
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/7
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/8
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/9
+        shutdown                      
+        ethernet
+        exit
+    exit
+    port 1/2/10
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/11
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/12
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/13
+        ethernet
+        exit
+        no shutdown
+    exit
+    port 1/2/14
+        description "DPI VALENCIA SDEVAL02_RADIUS_Eth3"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/15
+        description "DPI VALENCIA SDEVAL01_RADIUS_Eth1"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/16
+        description "PED77VAL01_1/2/16-PS93VAL01_Gi1/0/24-Ga-Gr_PaCoH"
+        ethernet
+            mode access
+            encap-type dot1q
+            no autonegotiate
+        exit
+        no shutdown
+    exit
+    port 1/2/17
+        description "DPI VALENCIA SDEVAL01_Eth0_O&M"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/18
+        description "DPI VALENCIA SRPVAL01_Em0_O&M"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/19
+        description "DPI VALENCIA SRPVAL02_Em1_RADIUS"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/20
+        description "DPI VALENCIA SDEVAL02_Eth2_O&M"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/21
+        description "DPI VALENCIA PTSVAL01_Port_mgmt1"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/22
+        description "DPI VALENCIA PTSVAL02_Port_mgmt2"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 1/2/23
+        shutdown
+        ethernet
+        exit
+    exit
+    port 1/2/24
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/1/1
+        description "10G:To_PED77VAL02_LAG-1"
+        ethernet
+            network
+                queue-policy "CORE-PED_Network_Queue"
+            exit
+            lldp
+                dest-mac nearest-bridge
+                    admin-status tx-rx
+                    notification
+                exit
+            exit                      
+        exit
+        no shutdown
+    exit
+    port 3/1/2
+        description "PED77VAL01_3/1/2-PS93VAL01_Te3/0/6-Gb-IuPs-Gn_PaCoH"
+        ethernet
+            mode access
+            encap-type dot1q
+        exit
+        no shutdown
+    exit
+    port 3/1/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/1/4
+        description "Conexion a VMTSOVA7750SR1201 3/2/1 (Servicio 1185 10Gbps) PNE5MCY01 GE7/1/9"
+        ethernet
+            network
+                queue-policy "CORE-PED_Network_Queue"
+            exit
+        exit
+        no shutdown
+    exit
+    port 3/1/5
+        shutdown
+        description "Reservado DNS PaCo - Hector Benitez "
+        ethernet
+        exit
+    exit
+    port 3/1/6
+        shutdown
+        description "Reservado DNS PaCo - Hector Benitez "
+        ethernet
+        exit
+    exit
+    port 3/1/7
+        shutdown
+        description "Reservado DNS PaCo - Hector Benitez "
+        ethernet
+        exit
+    exit
+    port 3/1/8
+        description "Datos-Contact Center - SW1"
+        ethernet
+            mode access
+            encap-type dot1q
+        exit
+        no shutdown
+    exit
+    port 3/1/9
+        shutdown
+        description "Reservado PaCo Huawei_15_11_12"
+        ethernet                      
+        exit
+    exit
+    port 3/1/10
+        shutdown
+        description "Reservado PaCo Huawei_15_11_12"
+        ethernet
+        exit
+    exit
+    port 3/2/1
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/2/2
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/2/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/2/4
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/2/5
+        description "PLATAFORMA DPI VALENCIA_PTSVAL01"
+        ethernet
+            mode access
+            encap-type dot1q
+        exit
+        no shutdown
+    exit
+    port 3/2/6
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/2/7
+        description "PLATAFORMA DPI VALENCIA_PTSVAL01"
+        ethernet
+            mode access
+            encap-type dot1q
+        exit
+        no shutdown
+    exit
+    port 3/2/8
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/2/9                        
+        shutdown
+        ethernet
+        exit
+    exit
+    port 3/2/10
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/1/1
+        description "10G:To_PED77VAL02_LAG-1"
+        ethernet
+            network
+                queue-policy "CORE-PED_Network_Queue"
+            exit
+            lldp
+                dest-mac nearest-bridge
+                    admin-status tx-rx
+                    notification
+                exit
+            exit
+        exit
+        no shutdown
+    exit
+    port 8/1/2
+        description "PED77VAL01_8/1/2-PS93VAL02_Te3/0/7-Gb-IuPs-Gn_PaCoH"
+        ethernet
+            mode access
+            encap-type dot1q
+        exit
+        no shutdown
+    exit
+    port 8/1/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/1/4
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/1/5
+        description "Datos-Contact Center - SW2"
+        ethernet
+            mode access
+            encap-type dot1q
+        exit
+        no shutdown
+    exit
+    port 8/1/6
+        shutdown
+        ethernet
+        exit
+    exit                              
+    port 8/1/7
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/1/8
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/1/9
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/1/10
+        shutdown
+        description "Interconexion-TX-eNODEB"
+        ethernet
+            mode access
+            encap-type dot1q
+        exit
+    exit
+    port 8/2/1
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/2
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/4
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/5
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/6
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/7
+        shutdown                      
+        ethernet
+        exit
+    exit
+    port 8/2/8
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/9
+        shutdown
+        ethernet
+        exit
+    exit
+    port 8/2/10
+        description "Conexion a TX VMTSOVANE4001 - eNodeB LTE"
+        ethernet
+            mode access
+            mtu 1600
+        exit
+        no shutdown
+    exit
+    port 10/1/1
+        description "GI_10/1/1_RNCVAL02_IuPS_HUAWEI"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 10/1/2
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/4
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/5
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/6
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/7
+        shutdown                      
+        ethernet
+        exit
+    exit
+    port 10/1/8
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/9
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/10
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/11
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/12
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/13
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/14
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/15
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/16
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/17
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/18
+        shutdown                      
+        ethernet
+        exit
+    exit
+    port 10/1/19
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/20
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/21
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/22
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/23
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/1/24
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/1
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/2
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/3
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/4
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/5
+        shutdown                      
+        ethernet
+        exit
+    exit
+    port 10/2/6
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/7
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/8
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/9
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/10
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/11
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/12
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/13
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/14
+        description "Reservado - PACO LTE"
+        ethernet
+            mode access
+            encap-type dot1q
+            no autonegotiate
+        exit
+        no shutdown
+    exit
+    port 10/2/15
+        shutdown
+        ethernet                      
+        exit
+    exit
+    port 10/2/16
+        description "PED77VAL01_10/2/16-PS93VAL01_Gi1/0/25-O&M_PaCoH"
+        ethernet
+            mode access
+            encap-type dot1q
+            no autonegotiate
+        exit
+        no shutdown
+    exit
+    port 10/2/17
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/18
+        description "PROYECTO_SMS_XURA_PTO24"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 10/2/19
+        description "DNSVAL01-LAN1-VLAN99"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 10/2/20
+        description "DNSVAL01-HA-VLAN300"
+        ethernet
+            mode access
+            no autonegotiate
+        exit
+        no shutdown
+    exit
+    port 10/2/21
+        description "DNSVAL01-GESTION"
+        ethernet
+            mode access
+        exit
+        no shutdown
+    exit
+    port 10/2/22
+        shutdown
+        ethernet
+        exit
+    exit
+    port 10/2/23
+        description "PROYECTO_SMS_XURA_PTO23"
+        ethernet
+            mode access
+        exit                          
+        no shutdown
+    exit
+    port 10/2/24
+        shutdown
+        ethernet
+            mode access
+            encap-type dot1q
+            no autonegotiate
+        exit
+    exit
+#--------------------------------------------------
+echo "System Sync-If-Timing Configuration"
+#--------------------------------------------------
+    system
+        sync-if-timing
+            begin
+            commit
+        exit
+    exit
+#--------------------------------------------------
+echo "LAG Configuration"
+#--------------------------------------------------
+    lag 1
+        description "20G:To_PED77VAL02_LAG-1"
+        port 3/1/1 
+        port 8/1/1 
+        lacp active administrative-key 32768 
+        no shutdown
+    exit
+    lag 30
+        description "to_PTSVAL01"
+        mode access
+        encap-type dot1q
+        port 3/2/5 
+        port 3/2/7 
+        no shutdown
+    exit
+#--------------------------------------------------
+echo "Redundancy Configuration"
+#--------------------------------------------------
+    redundancy 
+        synchronize boot-env
+    exit 
+#--------------------------------------------------
+echo "QoS Policy Configuration"
+#--------------------------------------------------
+    qos
+        sap-ingress 10 create
+            policy-name "QoS-PACO-AF41-NSN"
+            queue 1 create
+            exit
+            queue 5 create
+            exit
+            queue 6 create
+            exit                      
+            queue 11 multipoint create
+            exit
+            fc "ef" create
+                queue 6
+            exit
+            fc "h2" create
+                queue 5
+            exit
+            ip-criteria
+                entry 10 create
+                    description "TRAFICO GTP CHARGING GTPV0"
+                    match protocol udp
+                        dst-port eq 3386
+                    exit
+                    action fc "h2" priority high
+                exit
+                entry 20 create
+                    description "TRAFICO GTP CHARGING GTPV0"
+                    match protocol udp
+                        src-port eq 3386
+                    exit
+                    action fc "h2" priority high
+                exit
+                entry 30 create
+                    description "TRAFICCA"
+                    match protocol udp
+                        dst-port range 59998 60000
+                    exit
+                    action fc "ef" priority high
+                exit
+            exit
+        exit
+        sap-ingress 16 create
+            policy-name "QoS-PACO-CS7-NSN-SGSN"
+            queue 1 create
+            exit
+            queue 5 create
+            exit
+            queue 11 multipoint create
+            exit
+            fc "h2" create
+                queue 5
+            exit
+            ip-criteria
+                entry 10 create
+                    description " TRAFICO SENALIZACION SGSN GTPV1"
+                    match protocol udp
+                        dst-port eq 2123
+                    exit
+                    action fc "h2" priority high
+                exit
+                entry 20 create
+                    description " TRAFICO SENALIZACION SGSN GTPV1"
+                    match protocol udp
+                        src-port eq 2123
+                    exit
+                    action fc "h2" priority high
+                exit
+                entry 30 create
+                    description " TRAFICO SENALIZACION GBIP SGSN-BSC"
+                    match protocol udp
+                        dst-port range 50000 65535
+                    exit
+                    action fc "h2" priority high
+                exit
+            exit
+        exit
+        sap-ingress 17 create
+            policy-name "QoS-PACO-USERPLANE-HUAWEI-RNC"
+            queue 1 create
+            exit
+            queue 5 create
+            exit
+            queue 6 create
+            exit
+            queue 11 multipoint create
+            exit
+            fc "ef" create
+                queue 6
+            exit
+            ip-criteria
+                entry 10 create
+                    description " TRAFICO GTP-USER"
+                    match protocol udp
+                        dst-port eq 2152
+                    exit
+                    action fc "ef" priority high
+                exit
+                entry 20 create
+                    description " TRAFICO GTP-USER"
+                    match protocol udp
+                        src-port eq 2152
+                    exit
+                    action fc "ef" priority high
+                exit
+            exit
+        exit
+        sap-ingress 18 create
+            policy-name "QoS-PACO-USERPLANE-NSN"
+            queue 1 create
+            exit
+            queue 6 create
+            exit
+            queue 11 multipoint create
+            exit
+            fc "ef" create
+                queue 6
+            exit
+            ip-criteria
+                entry 10 create       
+                    description " TRAFICO GTP-USER"
+                    match protocol udp
+                        dst-port eq 2152
+                    exit
+                    action fc "ef" priority high
+                exit
+                entry 20 create
+                    description " TRAFICO GTP-USER"
+                    match protocol udp
+                        src-port eq 2152
+                    exit
+                    action fc "ef" priority high
+                exit
+                entry 30 create
+                    description " TRAFICO GBIP-USER"
+                    match protocol udp
+                        dst-port range 50000 65535
+                    exit
+                    action fc "ef" priority high
+                exit
+            exit
+        exit
+        sap-ingress 100 create
+            description "sap-ingress_PED"
+            queue 1 create
+            exit
+            queue 3 create
+            exit
+            queue 5 create
+            exit
+            queue 6 create
+            exit
+            queue 7 create
+            exit
+            queue 8 create
+            exit
+            queue 11 multipoint create
+            exit
+            fc "af" create
+                queue 3
+            exit
+            fc "be" create
+                queue 1
+            exit
+            fc "ef" create
+                queue 6
+            exit
+            fc "h1" create
+                queue 7
+            exit
+            fc "h2" create
+                queue 5
+            exit
+            fc "nc" create
+                queue 8               
+            exit
+            dot1p 0 fc "be" priority low
+            dot1p 1 fc "l2" priority high
+            dot1p 2 fc "af" priority high
+            dot1p 3 fc "l1" priority high
+            dot1p 4 fc "h2" priority high
+            dot1p 5 fc "ef" priority high
+            dot1p 6 fc "h1" priority high
+            dot1p 7 fc "nc" priority high
+            lsp-exp 0 fc "be" priority low
+            lsp-exp 1 fc "l2" priority high
+            lsp-exp 2 fc "af" priority high
+            lsp-exp 3 fc "l1" priority high
+            lsp-exp 4 fc "h2" priority high
+            lsp-exp 5 fc "ef" priority high
+            lsp-exp 6 fc "h1" priority high
+            lsp-exp 7 fc "nc" priority high
+            dscp be fc "be" priority high
+            dscp ef fc "ef" priority high
+            dscp nc1 fc "h1" priority high
+            dscp nc2 fc "nc" priority high
+            dscp af11 fc "l2" priority high
+            dscp af21 fc "af" priority high
+            dscp af31 fc "l1" priority high
+            dscp af41 fc "h2" priority high
+            prec 0 fc "be" priority low
+            prec 1 fc "l2" priority high
+            prec 2 fc "af" priority high
+            prec 3 fc "l1" priority high
+            prec 4 fc "h2" priority high
+            prec 5 fc "ef" priority high
+            prec 6 fc "h1" priority high
+            prec 7 fc "nc" priority high
+        exit
+        sap-egress 10 create
+            policy-name "QoS-PACO-AF41-NSN"
+            queue 1 create
+            exit
+            queue 5 create
+            exit
+            queue 6 create
+            exit
+            fc ef create
+                queue 6
+                dscp ef
+            exit 
+            fc h2 create
+                queue 5
+                dscp af41
+            exit 
+        exit
+        sap-egress 16 create
+            policy-name "QoS-PACO-USERPLANE-HUAWEI-RNC"
+            queue 1 create
+            exit                      
+            queue 5 create
+            exit
+            fc h2 create
+                queue 5
+                dscp af41
+            exit 
+        exit
+        sap-egress 17 create
+            policy-name "QoS-PACO-USERPLANE-NSN"
+            queue 1 create
+            exit
+            queue 6 create
+            exit
+            fc ef create
+                queue 6
+                dscp ef
+            exit 
+        exit
+        sap-egress 18 create
+            queue 1 create
+            exit
+            queue 6 create
+            exit
+            fc ef create
+                queue 6
+                dscp ef
+            exit 
+        exit
+        sap-egress 19 create
+            policy-name "QoS-PACO-USERPLANE-NSN-GGSN"
+            queue 1 create
+            exit
+            queue 6 create
+            exit
+            fc ef create
+                queue 6
+                dscp ef
+            exit 
+        exit
+        sap-egress 100 create
+            description "sap-egress"
+            queue 1 create
+            exit
+            queue 2 create
+            exit
+            queue 3 create
+            exit
+            queue 4 create
+            exit
+            queue 5 create
+            exit
+            queue 6 create
+            exit
+            queue 7 create
+            exit                      
+            queue 8 create
+            exit
+            fc af create
+                queue 3
+            exit 
+            fc be create
+                queue 1
+            exit 
+            fc ef create
+                queue 6
+            exit 
+            fc h1 create
+                queue 7
+            exit 
+            fc h2 create
+                queue 5
+            exit 
+            fc l1 create
+                queue 4
+            exit 
+            fc l2 create
+                queue 2
+            exit 
+            fc nc create
+                queue 8
+            exit 
+        exit
+        network 10 create
+            description "CORE_PED network QoS policy"
+            ingress
+                dscp be fc be profile out
+                dscp ef fc ef profile in
+                dscp nc1 fc h1 profile in
+                dscp nc2 fc nc profile in
+                dscp af11 fc l2 profile in
+                dscp af21 fc af profile in
+                dscp af31 fc l1 profile in
+                dscp af41 fc h2 profile in
+                lsp-exp 0 fc be profile out
+                lsp-exp 1 fc l2 profile out
+                lsp-exp 2 fc af profile in
+                lsp-exp 3 fc l1 profile in
+                lsp-exp 4 fc h2 profile in
+                lsp-exp 5 fc ef profile in
+                lsp-exp 6 fc h1 profile in
+                lsp-exp 7 fc nc profile in
+                dot1p 0 fc be profile out
+                dot1p 1 fc l2 profile in
+                dot1p 2 fc af profile in
+                dot1p 3 fc l1 profile in
+                dot1p 4 fc h2 profile in
+                dot1p 5 fc ef profile in
+                dot1p 6 fc h1 profile in
+                dot1p 7 fc nc profile in
+            exit                      
+            egress
+                fc af
+                    dscp-in-profile af21
+                    dscp-out-profile af21
+                    lsp-exp-in-profile 2
+                exit
+                fc h2
+                    dscp-out-profile af41
+                exit
+                fc l1
+                    dscp-in-profile af31
+                    dscp-out-profile af31
+                    lsp-exp-out-profile 3
+                exit
+                fc l2
+                    dscp-in-profile af11
+                    dscp-out-profile af11
+                exit
+            exit
+        exit
+    exit
+#--------------------------------------------------
+echo "Filter Configuration"
+#--------------------------------------------------
+    filter 
+        ip-filter 2 create
+            filter-name "ACL-SR625847607-CS6" 
+            entry 10 create
+                description "match-hsrp-v1" 
+                match protocol udp
+                    dst-ip 224.0.0.2/32
+                    dst-port eq 1985 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 3 create
+            filter-name "EVDO-OAM" 
+            entry 10 create
+                match protocol udp
+                    dst-port eq 1645 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                match protocol udp
+                    dst-port eq 1646 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                match protocol udp
+                    src-port eq 1645 
+                exit 
+                action forward        
+            exit 
+            entry 40 create
+                match protocol udp
+                    src-port eq 1646 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 4 create
+            filter-name "EVDO-SIG" 
+            entry 10 create
+                match protocol udp
+                    dst-port eq 699 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                match protocol udp
+                    dst-port eq 13600 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                match protocol udp
+                    dst-port eq 4879 
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                match protocol udp
+                    src-port eq 699 
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                match protocol udp
+                    src-port eq 13600 
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                match protocol udp
+                    src-port eq 4879 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 5 create
+            filter-name "Filtro_Datos_Moviles" 
+            entry 10 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    dst-port eq 22 
+                    src-ip 10.0.0.0/8
+                exit                  
+                action forward
+            exit 
+            entry 20 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 10.0.0.0/8
+                    icmp-type echo-request
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 10.0.0.0/8
+                    icmp-type 30
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 21 23 
+                    src-ip 10.0.0.0/8
+                exit 
+                action drop
+            exit 
+            entry 50 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port eq 69 
+                    src-ip 10.0.0.0/8
+                exit 
+                action drop
+            exit 
+            entry 60 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 161 162 
+                    src-ip 10.0.0.0/8
+                exit 
+                action drop
+            exit 
+            entry 70 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    src-ip 10.0.0.0/8
+                exit 
+                action drop
+            exit 
+            entry 110 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    dst-port eq 22 
+                    src-ip 172.16.0.0/12
+                exit                  
+                action forward
+            exit 
+            entry 120 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 172.16.0.0/12
+                    icmp-type echo-request
+                exit 
+                action forward
+            exit 
+            entry 130 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 172.16.0.0/12
+                    icmp-type 30
+                exit 
+                action forward
+            exit 
+            entry 140 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 21 23 
+                    src-ip 172.16.0.0/12
+                exit 
+                action drop
+            exit 
+            entry 150 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port eq 69 
+                    src-ip 172.16.0.0/12
+                exit 
+                action drop
+            exit 
+            entry 160 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 161 162 
+                    src-ip 172.16.0.0/12
+                exit 
+                action drop
+            exit 
+            entry 170 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    src-ip 172.16.0.0/12
+                exit 
+                action drop
+            exit 
+            entry 210 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    dst-port eq 22 
+                    src-ip 192.168.0.0/16
+                exit                  
+                action forward
+            exit 
+            entry 220 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 192.168.0.0/16
+                    icmp-type echo-request
+                exit 
+                action forward
+            exit 
+            entry 230 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 192.168.0.0/16
+                    icmp-type 30
+                exit 
+                action forward
+            exit 
+            entry 240 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 21 23 
+                    src-ip 192.168.0.0/16
+                exit 
+                action drop
+            exit 
+            entry 250 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port eq 69 
+                    src-ip 192.168.0.0/16
+                exit 
+                action drop
+            exit 
+            entry 260 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 161 162 
+                    src-ip 192.168.0.0/16
+                exit 
+                action drop
+            exit 
+            entry 270 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    src-ip 192.168.0.0/16
+                exit 
+                action drop
+            exit 
+            entry 310 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    dst-port eq 22 
+                    src-ip 186.24.0.0/15
+                exit                  
+                action forward
+            exit 
+            entry 320 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 186.24.0.0/15
+                    icmp-type echo-request
+                exit 
+                action forward
+            exit 
+            entry 330 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 186.24.0.0/15
+                    icmp-type 30
+                exit 
+                action forward
+            exit 
+            entry 340 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 21 23 
+                    src-ip 186.24.0.0/15
+                exit 
+                action drop
+            exit 
+            entry 350 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port eq 69 
+                    src-ip 186.24.0.0/15
+                exit 
+                action drop
+            exit 
+            entry 360 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 161 162 
+                    src-ip 186.24.0.0/15
+                exit 
+                action drop
+            exit 
+            entry 370 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    src-ip 186.24.0.0/15
+                exit 
+                action drop
+            exit 
+            entry 410 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    dst-port eq 22 
+                    src-ip 200.35.64.0/18
+                exit                  
+                action forward
+            exit 
+            entry 420 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 200.35.64.0/18
+                    icmp-type echo-request
+                exit 
+                action forward
+            exit 
+            entry 430 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 200.35.64.0/18
+                    icmp-type 30
+                exit 
+                action forward
+            exit 
+            entry 440 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 21 23 
+                    src-ip 200.35.64.0/18
+                exit 
+                action drop
+            exit 
+            entry 450 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port eq 69 
+                    src-ip 200.35.64.0/18
+                exit 
+                action drop
+            exit 
+            entry 460 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 161 162 
+                    src-ip 200.35.64.0/18
+                exit 
+                action drop
+            exit 
+            entry 470 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    src-ip 200.35.64.0/18
+                exit 
+                action drop
+            exit 
+            entry 510 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    dst-port eq 22 
+                    src-ip 200.31.128.0/19
+                exit                  
+                action forward
+            exit 
+            entry 520 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 200.31.128.0/19
+                    icmp-type echo-request
+                exit 
+                action forward
+            exit 
+            entry 530 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 200.31.128.0/19
+                    icmp-type 30
+                exit 
+                action forward
+            exit 
+            entry 540 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 21 23 
+                    src-ip 200.31.128.0/19
+                exit 
+                action drop
+            exit 
+            entry 550 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port eq 69 
+                    src-ip 200.31.128.0/19
+                exit 
+                action drop
+            exit 
+            entry 560 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 161 162 
+                    src-ip 200.31.128.0/19
+                exit 
+                action drop
+            exit 
+            entry 570 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    src-ip 200.31.128.0/19
+                exit 
+                action drop
+            exit 
+            entry 610 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    dst-port eq 22 
+                    src-ip 200.71.128.0/18
+                exit                  
+                action forward
+            exit 
+            entry 620 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 200.71.128.0/18
+                    icmp-type echo-request
+                exit 
+                action forward
+            exit 
+            entry 630 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_1"
+                    src-ip 200.71.128.0/18
+                    icmp-type 30
+                exit 
+                action forward
+            exit 
+            entry 640 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 21 23 
+                    src-ip 200.71.128.0/18
+                exit 
+                action drop
+            exit 
+            entry 650 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port eq 69 
+                    src-ip 200.71.128.0/18
+                exit 
+                action drop
+            exit 
+            entry 660 create
+                match protocol tcp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    dst-port range 161 162 
+                    src-ip 200.71.128.0/18
+                exit 
+                action drop
+            exit 
+            entry 670 create
+                match protocol icmp
+                    dst-ip ip-prefix-list "Filtro_Datos_Moviles_Destino_2"
+                    src-ip 200.71.128.0/18
+                exit 
+                action drop
+            exit 
+            entry 65500 create
+                match 
+                exit 
+                action forward
+            exit 
+        exit                          
+        ip-filter 6 create
+            filter-name "QoS-PACO-AF13-HUAWEI" 
+            entry 10 create
+                description "SNMP" 
+                match protocol udp
+                    dst-port eq 161 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "SNMP" 
+                match protocol udp
+                    src-port eq 161 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "SNMP" 
+                match protocol udp
+                    dst-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "SNMP" 
+                match protocol udp
+                    src-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "SNMP" 
+                match protocol tcp
+                    dst-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                description "SNMP" 
+                match protocol tcp
+                    src-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 70 create
+                description "FTP" 
+                match protocol tcp
+                    dst-port range 20 21 
+                exit 
+                action forward
+            exit 
+            entry 80 create
+                description "FTP" 
+                match protocol tcp
+                    src-port range 20 21 
+                exit 
+                action forward
+            exit 
+            entry 90 create
+                description "ICMP" 
+                match protocol icmp
+                exit 
+                action forward
+            exit 
+            entry 100 create
+                description "TFTP" 
+                match protocol udp
+                    dst-port eq 69 
+                exit 
+                action forward
+            exit 
+            entry 110 create
+                description "TFTP" 
+                match protocol udp
+                    src-port eq 69 
+                exit 
+                action forward
+            exit 
+            entry 120 create
+                description "DHCP" 
+                match protocol udp
+                    dst-port range 67 68 
+                exit 
+                action forward
+            exit 
+            entry 130 create
+                description "DHCP" 
+                match protocol udp
+                    src-port range 67 68 
+                exit 
+                action forward
+            exit 
+            entry 140 create
+                description "HTTP" 
+                match protocol tcp
+                    dst-port eq 80 
+                exit 
+                action forward
+            exit 
+            entry 150 create
+                description "HTTP" 
+                match protocol tcp
+                    src-port eq 80 
+                exit 
+                action forward
+            exit 
+            entry 160 create
+                description "HTTPS" 
+                match protocol tcp
+                    dst-port eq 443   
+                exit 
+                action forward
+            exit 
+            entry 170 create
+                description "HTTPS" 
+                match protocol tcp
+                    src-port eq 443 
+                exit 
+                action forward
+            exit 
+            entry 180 create
+                description "HTTPS" 
+                match protocol tcp
+                    dst-port eq 843 
+                exit 
+                action forward
+            exit 
+            entry 190 create
+                description "HTTPS" 
+                match protocol tcp
+                    src-port eq 843 
+                exit 
+                action forward
+            exit 
+            entry 200 create
+                description "Syslog" 
+                match protocol tcp
+                    dst-port eq 514 
+                exit 
+                action forward
+            exit 
+            entry 210 create
+                description "Syslog" 
+                match protocol tcp
+                    src-port eq 514 
+                exit 
+                action forward
+            exit 
+            entry 220 create
+                description "HTTP-Alt" 
+                match protocol tcp
+                    dst-port eq 8080 
+                exit 
+                action forward
+            exit 
+            entry 230 create
+                description "HTTP-Alt" 
+                match protocol tcp
+                    src-port eq 8080 
+                exit 
+                action forward
+            exit 
+            entry 240 create
+                description "LMT" 
+                match protocol tcp    
+                    dst-port eq 6006 
+                exit 
+                action forward
+            exit 
+            entry 250 create
+                description "LMT" 
+                match protocol tcp
+                    src-port eq 6006 
+                exit 
+                action forward
+            exit 
+            entry 260 create
+                description "LMT" 
+                match protocol tcp
+                    dst-port eq 8006 
+                exit 
+                action forward
+            exit 
+            entry 270 create
+                description "LMT" 
+                match protocol tcp
+                    src-port eq 8006 
+                exit 
+                action forward
+            exit 
+            entry 280 create
+                description "Upgrade tool" 
+                match protocol tcp
+                    dst-port eq 6088 
+                exit 
+                action forward
+            exit 
+            entry 290 create
+                description "Upgrade Tool" 
+                match protocol tcp
+                    src-port eq 6088 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 7 create
+            filter-name "QoS-PACO-AF13-NSN" 
+            entry 10 create
+                description "SNMP" 
+                match protocol udp
+                    dst-port eq 161 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "SNMP" 
+                match protocol udp
+                    src-port eq 161 
+                exit 
+                action forward        
+            exit 
+            entry 30 create
+                description "SNMP" 
+                match protocol udp
+                    dst-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "SNMP" 
+                match protocol udp
+                    src-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "SNMP" 
+                match protocol tcp
+                    dst-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                description "SNMP" 
+                match protocol tcp
+                    src-port eq 162 
+                exit 
+                action forward
+            exit 
+            entry 70 create
+                description "FTP" 
+                match protocol tcp
+                    dst-port range 20 21 
+                exit 
+                action forward
+            exit 
+            entry 80 create
+                description "FTP" 
+                match protocol tcp
+                    src-port range 20 21 
+                exit 
+                action forward
+            exit 
+            entry 90 create
+                description "ICMP" 
+                match protocol icmp
+                exit 
+                action forward
+            exit 
+            entry 100 create
+                description "TFTP" 
+                match protocol udp
+                    dst-port eq 69 
+                exit 
+                action forward        
+            exit 
+            entry 110 create
+                description "TFTP" 
+                match protocol udp
+                    src-port eq 69 
+                exit 
+                action forward
+            exit 
+            entry 120 create
+                description "DHCP" 
+                match protocol udp
+                    dst-port range 67 68 
+                exit 
+                action forward
+            exit 
+            entry 130 create
+                description "DHCP" 
+                match protocol udp
+                    src-port range 67 68 
+                exit 
+                action forward
+            exit 
+            entry 140 create
+                description "HTTP" 
+                match protocol tcp
+                    dst-port eq 80 
+                exit 
+                action forward
+            exit 
+            entry 150 create
+                description "HTTP" 
+                match protocol tcp
+                    src-port eq 80 
+                exit 
+                action forward
+            exit 
+            entry 160 create
+                description "HTTPS" 
+                match protocol tcp
+                    dst-port eq 443 
+                exit 
+                action forward
+            exit 
+            entry 170 create
+                description "HTTPS" 
+                match protocol tcp
+                    src-port eq 443 
+                exit 
+                action forward
+            exit 
+            entry 180 create
+                description "HTTPS" 
+                match protocol tcp
+                    dst-port eq 843 
+                exit                  
+                action forward
+            exit 
+            entry 190 create
+                description "HTTPS" 
+                match protocol tcp
+                    src-port eq 843 
+                exit 
+                action forward
+            exit 
+            entry 200 create
+                description "Syslog" 
+                match protocol tcp
+                    dst-port eq 514 
+                exit 
+                action forward
+            exit 
+            entry 210 create
+                description "Syslog" 
+                match protocol tcp
+                    src-port eq 514 
+                exit 
+                action forward
+            exit 
+            entry 220 create
+                description "HTTP-Alt" 
+                match protocol tcp
+                    dst-port eq 8080 
+                exit 
+                action forward
+            exit 
+            entry 230 create
+                description "HTTP-Alt" 
+                match protocol tcp
+                    src-port eq 8080 
+                exit 
+                action forward
+            exit 
+            entry 240 create
+                description "RCP" 
+                match protocol tcp
+                    dst-port eq 4303 
+                exit 
+                action forward
+            exit 
+            entry 250 create
+                description "RCP" 
+                match protocol tcp
+                    src-port eq 4303 
+                exit 
+                action forward
+            exit 
+            entry 260 create
+                description "RCP" 
+                match protocol udp
+                    dst-port eq 4303  
+                exit 
+                action forward
+            exit 
+            entry 270 create
+                description "RCP" 
+                match protocol udp
+                    src-port eq 4303 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 8 create
+            filter-name "QoS-PACO-AF31-HUAWEI" 
+            entry 10 create
+                description "Telnet" 
+                match protocol tcp
+                    dst-port eq 23 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "Telnet" 
+                match protocol tcp
+                    src-port eq 23 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "ssh" 
+                match protocol tcp
+                    dst-port eq 22 
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "ssh" 
+                match protocol tcp
+                    src-port eq 22 
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "NTP" 
+                match protocol udp
+                    dst-port eq 123 
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                description "NTP" 
+                match protocol udp
+                    src-port eq 123 
+                exit 
+                action forward
+            exit                      
+            entry 70 create
+                description "Communication-with-FAM" 
+                match protocol tcp
+                    dst-port eq 1500 
+                exit 
+                action forward
+            exit 
+            entry 80 create
+                description "Communication-with-FAM" 
+                match protocol tcp
+                    src-port eq 1500 
+                exit 
+                action forward
+            exit 
+            entry 90 create
+                description "Communication-with-FAM" 
+                match protocol tcp
+                    dst-port eq 3389 
+                exit 
+                action forward
+            exit 
+            entry 100 create
+                description "Communication-with-FAM" 
+                match protocol tcp
+                    src-port eq 3389 
+                exit 
+                action forward
+            exit 
+            entry 110 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 6000 
+                exit 
+                action forward
+            exit 
+            entry 120 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 6000 
+                exit 
+                action forward
+            exit 
+            entry 130 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 6001 
+                exit 
+                action forward
+            exit 
+            entry 140 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 6001 
+                exit 
+                action forward        
+            exit 
+            entry 150 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 8000 
+                exit 
+                action forward
+            exit 
+            entry 160 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 8000 
+                exit 
+                action forward
+            exit 
+            entry 170 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 8001 
+                exit 
+                action forward
+            exit 
+            entry 180 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 8001 
+                exit 
+                action forward
+            exit 
+            entry 190 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 6099 
+                exit 
+                action forward
+            exit 
+            entry 200 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 6099 
+                exit 
+                action forward
+            exit 
+            entry 210 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 8099 
+                exit 
+                action forward
+            exit 
+            entry 220 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 8099 
+                exit                  
+                action forward
+            exit 
+            entry 230 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 6100 
+                exit 
+                action forward
+            exit 
+            entry 240 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 6100 
+                exit 
+                action forward
+            exit 
+            entry 250 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 8100 
+                exit 
+                action forward
+            exit 
+            entry 260 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 8100 
+                exit 
+                action forward
+            exit 
+            entry 270 create
+                description "MML" 
+                match protocol tcp
+                    dst-port eq 16002 
+                exit 
+                action forward
+            exit 
+            entry 280 create
+                description "MML" 
+                match protocol tcp
+                    src-port eq 16002 
+                exit 
+                action forward
+            exit 
+            entry 290 create
+                description "DUAL-OMU-TRAFFIC" 
+                match protocol tcp
+                    dst-port range 11774 11776 
+                exit 
+                action forward
+            exit 
+            entry 300 create
+                description "DUAL-OMU-TRAFFIC" 
+                match protocol tcp
+                    src-port range 11774 11776 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 9 create
+            filter-name "QoS-PACO-AF31-NSN" 
+            entry 10 create
+                description "DNS" 
+                match protocol udp
+                    dst-port eq 53 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "DNS" 
+                match protocol udp
+                    src-port eq 53 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "TACACS" 
+                match protocol tcp
+                    dst-port eq 49 
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "TACACS" 
+                match protocol tcp
+                    src-port eq 49 
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                description "Telnet" 
+                match protocol tcp
+                    dst-port eq 23 
+                exit 
+                action forward
+            exit 
+            entry 70 create
+                description "Telnet" 
+                match protocol tcp
+                    src-port eq 23 
+                exit 
+                action forward
+            exit 
+            entry 80 create
+                description "ssh" 
+                match protocol tcp
+                    dst-port eq 22 
+                exit 
+                action forward
+            exit                      
+            entry 90 create
+                description "ssh" 
+                match protocol tcp
+                    src-port eq 22 
+                exit 
+                action forward
+            exit 
+            entry 100 create
+                description "CLNSoIP" 
+                match protocol udp
+                    dst-port eq 147 
+                exit 
+                action forward
+            exit 
+            entry 110 create
+                description "CLNSoIP" 
+                match protocol udp
+                    src-port eq 147 
+                exit 
+                action forward
+            exit 
+            entry 120 create
+                description "CLNSoTCP" 
+                match protocol tcp
+                    dst-port eq 102 
+                exit 
+                action forward
+            exit 
+            entry 130 create
+                description "CLNSoTCP" 
+                match protocol tcp
+                    src-port eq 102 
+                exit 
+                action forward
+            exit 
+            entry 140 create
+                description "NTP" 
+                match protocol udp
+                    dst-port eq 123 
+                exit 
+                action forward
+            exit 
+            entry 150 create
+                description "NTP" 
+                match protocol udp
+                    src-port eq 123 
+                exit 
+                action forward
+            exit 
+            entry 160 create
+                description "IP SLA" 
+                match protocol udp
+                    dst-port eq 1967 
+                exit 
+                action forward        
+            exit 
+            entry 170 create
+                description "IP SLA" 
+                match protocol udp
+                    src-port eq 1967 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 10 create
+            filter-name "QoS-PACO-AF41-NSN" 
+            entry 10 create
+                description "TRAFICO GTP CHARGING GTPV0" 
+                match protocol udp
+                    dst-port eq 3386 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "TRAFICO GTP CHARGING GTPV0" 
+                match protocol udp
+                    src-port eq 3386 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "TRAFICCA" 
+                match protocol udp
+                    dst-port range 59998 60000 
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "TRAFICCA" 
+                match protocol udp
+                    src-port range 59998 60000 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 11 create
+            filter-name "QoS-PACO-CS6-HUAWEI" 
+            entry 10 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-port eq 1985 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    src-port eq 1985 
+                exit 
+                action forward        
+            exit 
+            entry 30 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.2/32
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.102/32
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.18/32
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 12 create
+            filter-name "QoS-PACO-CS6-NSN" 
+            entry 10 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-port eq 1985 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    src-port eq 1985 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.2/32
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.102/32
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.18/32
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                description "OSPF" 
+                match protocol ospf-igp
+                exit 
+                action forward
+            exit 
+            entry 70 create
+                description "LDP" 
+                match protocol tcp
+                    dst-port eq 646 
+                exit 
+                action forward
+            exit 
+            entry 80 create
+                description "LDP" 
+                match protocol tcp
+                    src-port eq 646 
+                exit 
+                action forward
+            exit 
+            entry 90 create
+                description "BFD" 
+                match protocol udp
+                    dst-port range 3784 3785 
+                exit 
+                action forward
+            exit 
+            entry 100 create
+                description "BFD" 
+                match protocol udp
+                    src-port range 3784 3785 
+                exit 
+                action forward
+            exit 
+            entry 110 create
+                description "RIP" 
+                match protocol udp
+                    dst-port range 520 521 
+                exit 
+                action forward
+            exit 
+            entry 120 create
+                description "RIP" 
+                match protocol udp
+                    src-port range 520 521 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 13 create           
+            filter-name "QoS-PACO-CS6-NSN-GGSN" 
+            entry 10 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-port eq 1985 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    src-port eq 1985 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.2/32
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.102/32
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "TRAFICO HSRP VRRP" 
+                match protocol udp
+                    dst-ip 224.0.0.18/32
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                description "OSPF" 
+                match protocol ospf-igp
+                exit 
+                action forward
+            exit 
+            entry 70 create
+                description "LDP" 
+                match protocol tcp
+                    dst-port eq 646 
+                exit 
+                action forward
+            exit 
+            entry 80 create
+                description "LDP" 
+                match protocol tcp
+                    src-port eq 646 
+                exit 
+                action forward        
+            exit 
+            entry 90 create
+                description "BFD" 
+                match protocol udp
+                    dst-port range 3784 3785 
+                exit 
+                action forward
+            exit 
+            entry 100 create
+                description "BFD" 
+                match protocol udp
+                    src-port range 3784 3785 
+                exit 
+                action forward
+            exit 
+            entry 110 create
+                description "RIP" 
+                match protocol udp
+                    dst-port range 520 521 
+                exit 
+                action forward
+            exit 
+            entry 120 create
+                description "RIP" 
+                match protocol udp
+                    src-port range 520 521 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 14 create
+            filter-name "QoS-PACO-CS7-HUAWEI-RNC" 
+            entry 10 create
+                description "TRAFICO SIGTRAN" 
+                match 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 15 create
+            filter-name "QoS-PACO-CS7-NSN-GGSN" 
+            entry 10 create
+                description "TRAFICO SEQALIZACION SGSN GTPV1" 
+                match protocol udp
+                    dst-port eq 2123 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "TRAFICO SEQALIZACION SGSN GTPV1" 
+                match protocol udp
+                    src-port eq 2123 
+                exit 
+                action forward
+            exit                      
+            entry 30 create
+                description "TRAFICO SEQALIZACION AAA" 
+                match protocol udp
+                    dst-port range 1812 1813 
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "TRAFICO SEQALIZACION AAA" 
+                match protocol udp
+                    src-port range 1812 1813 
+                exit 
+                action forward
+            exit 
+            entry 50 create
+                description "TRAFICO SEQALIZACION AAA" 
+                match protocol udp
+                    dst-port range 1645 1646 
+                exit 
+                action forward
+            exit 
+            entry 60 create
+                description "TRAFICO SEQALIZACION AAA" 
+                match protocol udp
+                    src-port range 1645 1646 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 16 create
+            filter-name "QoS-PACO-CS7-NSN-SGSN" 
+            entry 10 create
+                description "TRAFICO SIGTRAN" 
+                match 
+                exit 
+                no action 
+            exit 
+            entry 20 create
+                description "TRAFICO SENALIZACION SGSGN GTPV1" 
+                match protocol udp
+                    dst-port eq 2123 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "TRAFICO SEQALIZACION SGSN GTPV1" 
+                match protocol udp
+                    src-port eq 2123 
+                exit 
+                action forward
+            exit 
+            entry 40 create
+                description "TRAFICO DE SENALIZACION GBIP SGSN-BSC" 
+                match protocol udp
+                    dst-port range 50000 65535 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 17 create
+            filter-name "QoS-PACO-USERPLANE-HUAWEI-RNC" 
+            entry 10 create
+                description "TRAFICO GTP-USER" 
+                match protocol udp
+                    dst-port eq 2152 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "TRAFICO GTP-USER" 
+                match protocol udp
+                    src-port eq 2152 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 18 create
+            filter-name "QoS-PACO-USERPLANE-NSN" 
+            entry 10 create
+                description "TRAFICO GTP-USER" 
+                match protocol udp
+                    dst-port eq 2152 
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                description "TRAFICO GTP-USER" 
+                match protocol udp
+                    src-port eq 2152 
+                exit 
+                action forward
+            exit 
+            entry 30 create
+                description "TRAFICO GBIP-USER" 
+                match protocol udp
+                    dst-port range 50000 65535 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 19 create
+            filter-name "QoS-PACO-USERPLANE-NSN-GGSN" 
+            entry 10 create
+                description "TRAFICO GTP-USER" 
+                match protocol udp
+                    dst-port eq 2152 
+                exit 
+                action forward
+            exit 
+            entry 20 create           
+                description "TRAFICO GTP-USER" 
+                match protocol udp
+                    src-port eq 2152 
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 21 create
+            filter-name "ACCESS-LIST-1" 
+            entry 10 create
+                match 
+                    src-ip ip-prefix-list "access-list-1"
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                match 
+                exit 
+                action drop
+            exit 
+        exit 
+        ip-filter 22 create
+            filter-name "ACCESS-LIST-4" 
+            entry 10 create
+                match 
+                    src-ip 10.96.16.0/23
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                match 
+                    dst-ip 10.96.16.0/23
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 23 create
+            filter-name "ACCESS-LIST-6" 
+            entry 10 create
+                match 
+                    src-ip 10.18.161.0/24
+                exit 
+                action forward
+            exit 
+            entry 20 create
+                match 
+                    dst-ip 10.18.161.0/24
+                exit 
+                action forward
+            exit 
+        exit 
+        ip-filter 24 create
+            filter-name "ACCESS-LIST-101" 
+            entry 10 create
+                match                 
+                    src-ip 9.9.9.9/32
+                exit 
+                action forward
+            exit 
+        exit 
+    exit 
+#--------------------------------------------------
+echo "Management Router Configuration"
+#--------------------------------------------------
+    router management
+    exit
+
+#--------------------------------------------------
+echo "Router (Network Side) Configuration"
+#--------------------------------------------------
+    router 
+        interface "DNSVAL01-GESTION"
+            no shutdown
+        exit
+        interface "Interconexion-TX-eNODEB"
+            no shutdown
+        exit
+        interface "PED77VAL01_3/1/4-PCRSMCY01_0/3/0"
+            address 10.19.9.42/30
+            description "PED77VAL01_3/1/4-PCRSMCY01_0/3/0"
+            port 3/1/4
+            icmp
+                no mask-reply
+            exit
+            no shutdown
+            bfd 100 receive 100 multiplier 4
+        exit
+        interface "PED77VAL01_LAG1-PED77VAL02_LAG1"
+            address 10.19.9.61/30
+            description "PED77VAL01_LAG1-PED77VAL02_LAG1"
+            port lag-1
+            icmp
+                no mask-reply
+            exit
+            no shutdown
+            bfd 100 receive 100 multiplier 4
+        exit
+        interface "system"
+            address 10.19.11.128/32
+            no shutdown
+        exit
+        autonomous-system 6306
+        router-id 10.19.11.128
+#--------------------------------------------------
+echo "OSPFv2 Configuration"
+#--------------------------------------------------
+        ospf 10.19.11.128
+            traffic-engineering
+            timers
+                spf-wait 5000 50 50   
+                lsa-generate 5000 10 15
+                lsa-arrival 15
+            exit
+            area 0.0.0.0
+                interface "system"
+                    no shutdown
+                exit
+                interface "PED77VAL01_3/1/4-PCRSMCY01_0/3/0"
+                    interface-type point-to-point
+                    mtu 1600
+                    metric 1000
+                    authentication-type message-digest
+                    bfd-enable 
+                    message-digest-key 1 md5 "gNV41NZuAlc8c3IE9mn9qkkIRvnWjjd0Sr5FbFeJjiDlVXj3TgD.Lkt/D0.b0sPC5kuLn1LsWBNoQtKXJA0Ls." hash2
+                    no shutdown
+                exit
+                interface "PED77VAL01_LAG1-PED77VAL02_LAG1"
+                    interface-type point-to-point
+                    mtu 1600
+                    metric 5000
+                    authentication-type message-digest
+                    bfd-enable 
+                    message-digest-key 1 md5 "oY5pJcHkQ4F9R472.lxsT2zhN0mycgJddTGODfVFTo6sIrpiKtDywJd3SaiVcfNVZ8ew5pvb1qgmqkBYBfAjwk" hash2
+                    no shutdown
+                exit
+            exit
+            area 0.0.0.1
+            exit
+        exit
+#--------------------------------------------------
+echo "MPLS Configuration"
+#--------------------------------------------------
+        mpls
+            resignal-timer 180
+            admin-group "VERDE-AZULADO" 3
+            admin-group "VINOTINTO" 4
+            interface "system"
+                no shutdown
+            exit
+            interface "PED77VAL01_3/1/4-PCRSMCY01_0/3/0"
+                admin-group "VERDE-AZULADO"
+                admin-group "VINOTINTO"
+                no shutdown
+            exit
+            interface "PED77VAL01_LAG1-PED77VAL02_LAG1"
+                admin-group "VERDE-AZULADO"
+                admin-group "VINOTINTO"
+                no shutdown
+            exit
+        exit
+#--------------------------------------------------
+echo "RSVP Configuration"
+#--------------------------------------------------
+        rsvp
+            interface "system"        
+                no shutdown
+            exit
+            interface "PED77VAL01_3/1/4-PCRSMCY01_0/3/0"
+                no shutdown
+            exit
+            interface "PED77VAL01_LAG1-PED77VAL02_LAG1"
+                no shutdown
+            exit
+            no shutdown
+        exit
+#--------------------------------------------------
+echo "MPLS LSP Configuration"
+#--------------------------------------------------
+        mpls
+            path "path_loose"
+                no shutdown
+            exit
+            path "path_to_PED77VAL02_by_PED77VAL02"
+                hop 10 10.19.11.129 strict
+                no shutdown
+            exit
+            path "PATH-VERDE-AZULADO"
+                no shutdown
+            exit
+            path "PATH-VINOTINTO"
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED76CAN01"
+                to 10.19.1.10
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED76CAN02"
+                to 10.19.1.13
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit                  
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED76CAN03"
+                to 10.19.11.8
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED76CAN04"
+                to 10.19.11.9
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED76MCY01"
+                to 10.19.11.83
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit                  
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED76MCY02"
+                to 10.19.11.84
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7COL01"
+                to 10.19.11.11
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7COL02"
+                to 10.19.11.12
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7MCY01"
+                to 10.19.11.81        
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7MCY02"
+                to 10.19.11.82
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76COL01"
+                to 10.19.1.20
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76COL02"
+                to 10.19.1.23
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit                  
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76MCY01"
+                to 10.19.11.85
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76MCY02"
+                to 10.19.11.86
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76BTO01"
+                to 10.19.11.55
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76BTO02"
+                to 10.19.11.56
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED77COL04"
+                to 10.19.11.114
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED76COL01"
+                to 10.19.1.26
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED65COL02"
+                to 10.19.11.13
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7BTO01"
+                to 10.19.11.51
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7BTO02"
+                to 10.19.11.52
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7CAN01"
+                to 10.19.11.1
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7CAN02"
+                to 10.19.11.2
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7MBO01"
+                to 10.19.11.71
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7MBO02"
+                to 10.19.11.72
+                egress-statistics
+                    no shutdown
+                    collect-stats     
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7PLC01"
+                to 10.19.11.31
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7PLC02"
+                to 10.19.11.32
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7POZ01"
+                to 10.19.11.41
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7POZ02"
+                to 10.19.11.42
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7SNC01"
+                to 10.19.11.61
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7SNC02"
+                to 10.19.11.62
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby           
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7VAL01"
+                to 10.19.11.21
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-IP7VAL02"
+                to 10.19.11.22
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76CAN01"
+                to 10.19.1.4
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit                      
+            lsp "lsp_PED77VAL01-to-PEP76CAN02"
+                to 10.19.1.7
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76MBO01"
+                to 10.19.1.52
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76MBO02"
+                to 10.19.1.55
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76PLC01"
+                to 10.19.1.68
+                egress-statistics
+                    no shutdown       
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76PLC02"
+                to 10.19.1.71
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76POZ01"
+                to 10.19.11.45
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76POZ02"
+                to 10.19.11.46
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76SNC01"
+                to 10.19.11.65
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76SNC02"
+                to 10.19.11.66
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76VAL01"
+                to 10.19.11.25
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PEP76VAL02"
+                to 10.19.11.26
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED77VAL02"
+                to 10.19.11.129
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                fast-reroute one-to-one
+                exit
+                primary "path_to_PED77VAL02_by_PED77VAL02"
+                exit
+                secondary "path_loose"
+                    standby
+                exit
+                no shutdown
+            exit
+            lsp "lsp_PED77VAL01-to-PED77COL03"
+                to 10.19.11.113
+                egress-statistics
+                    no shutdown
+                    collect-stats
+                exit
+                cspf
+                primary "PATH-VINOTINTO"
+                    include "VERDE-AZULADO"
+                    include "VINOTINTO"
+                exit
+                secondary "PATH-VERDE-AZULADO"
+                    standby
+                    include "VERDE-AZULADO"
+                exit
+                no shutdown
+            exit                      
+            no shutdown
+        exit
+#--------------------------------------------------
+echo "LDP Configuration"
+#--------------------------------------------------
+        ldp
+            graceful-restart 
+            exit
+            interface-parameters
+                interface "PED77VAL01_3/1/4-PCRSMCY01_0/3/0"
+                    multicast-traffic disable
+                exit
+                interface "PED77VAL01_LAG1-PED77VAL02_LAG1"
+                    multicast-traffic disable
+                exit
+            exit
+            targeted-session
+            exit
+            no shutdown
+        exit
+#--------------------------------------------------
+echo "Web Portal Protocol Configuration"
+#--------------------------------------------------
+    exit
+
+#--------------------------------------------------
+echo "Service Configuration"
+#--------------------------------------------------
+    service
+        customer 1 create
+            description "PED77VAL01"
+        exit
+        sdp 12 mpls create
+            description "SDP_to_PED77VAL02_LDP"
+            far-end 10.19.11.129
+            ldp
+            keep-alive
+                shutdown
+            exit
+            no shutdown
+        exit
+        sdp 22 mpls create
+            description "SDP_to_PED77VAL01"
+            far-end 10.19.11.129
+            lsp "lsp_PED77VAL01-to-PED77VAL02"
+            keep-alive
+                shutdown
+            exit
+            no shutdown
+        exit
+        sdp 114 mpls create
+            description "SDP_to_PED77VAL01_RSVP"
+            far-end 10.19.11.129
+            lsp "lsp_PED77VAL01-to-PED77VAL02"
+            keep-alive                
+                shutdown
+            exit
+            no shutdown
+        exit
+        sdp 1129 mpls create
+            description "SDP_to_PED77VAL02_RSVP"
+            far-end 10.19.11.129
+            lsp "lsp_PED77VAL01-to-PED77VAL02"
+            keep-alive
+                shutdown
+            exit
+            no shutdown
+        exit
+        vprn 1 customer 1 create
+        exit
+        vprn 150 customer 1 create
+            interface "to_PS93VAL01_1/0/24-Vlan274-Gr" create
+            exit
+            interface "SMS_XURA_PTO24_SIGNALING" create
+            exit
+        exit
+        vprn 10000 customer 1 create
+            interface "to_PS93VAL01_1/0/25-Vlan270_OYM" create
+            exit
+            interface "DNSVAL01-GESTION" create
+            exit
+            interface "prueba" create
+            exit
+        exit
+        vprn 10020 customer 1 create
+            interface "to_PS93VAL01_3/0/6-Vlan273-IuPs" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan281-IuPs" create
+            exit
+            interface "VRF-3G-IuPS_RNCVAL02_Huawei" create
+            exit
+            interface "RNCVAL01" create
+            exit
+            interface "RNCVAL01_IuPs" create
+            exit
+            interface "PED77VAL01_1/1/5_RNCVAL01_IUPS" create
+            exit
+            interface "PED77VAL01_1/1/7_RNCVAL01_IUPS" create
+            exit
+        exit
+        vprn 10021 customer 1 create
+            interface "to_PS93VAL01_3/0/6-Vlan285-Gi-Ra" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan278-Gi-Ra" create
+            exit
+            interface "PED77VAL01 - SRPVAL02_RADIUS" create
+            exit
+            interface "PED77VAL01 - SDEVAL01_RADIUS" create
+            exit
+        exit                          
+        vprn 10026 customer 1 create
+            interface "to_PS93VAL01_3/0/6-Vlan272-GbIP" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan280-GbIP" create
+            exit
+        exit
+        vprn 10050 customer 1 create
+        exit
+        vprn 10076 customer 1 create
+            interface "to_PS93VAL01_3/0/6-Vlan284-Gi-Se" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan277-Gi-Se" create
+            exit
+        exit
+        vprn 10077 customer 1 create
+            interface "to_PS93VAL01_3/0/6-Vlan283-Gi-Na" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan276-Gi-Na" create
+            exit
+            interface "PTSVAL01_1_3/1_4_GISERV_V2" create
+            exit
+        exit
+        vprn 10275 customer 1 create
+            interface "SMS_XURA_PED77VAL01 - PED77VAL02" create
+            exit
+        exit
+        vprn 20016 customer 1 create
+            interface "to_PS93VAL01_1/0/24-Vlan271-Ga" create
+            exit
+        exit
+        vprn 20017 customer 1 create
+            interface "to_PS93VAL01_3/0/6-Vlan275-Gn" create
+            exit
+            interface "to_PS93VAL01_3/0/6-Vlan286-S1u" create
+            exit
+            interface "to_PS93VAL01_3/0/6-Vlan279-Gn" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan282-Gn" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan287-S1u" create
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan288-Gn" create
+            exit
+            interface "DNSVAL01-LAN1-TRAFICO-Vpls300" create
+            exit
+        exit
+        vprn 20247 customer 1 create
+            interface "VAL01_3/1/8-SW1_CONTACT-C-DATOS" create
+            exit
+            interface "VAL01_8/1/5-SW2_CONTACT-C-DATOS" create
+            exit
+        exit
+        vprn 20252 customer 1 create
+            interface "loopback250" create
+            exit                      
+        exit
+        vprn 58001 customer 1 create
+            interface "PED77VAL01 - PTSVAL01_mgmt1" create
+            exit
+            interface "PED77VAL01 - PTSVAL02-mgmt2" create
+            exit
+            interface "PED77VAL01 - SRPVAL01_O&M" create
+            exit
+            interface "PED77VAL01 - SDEVAL01_O&M" create
+            exit
+        exit
+        vprn 70003 customer 1 create
+            interface "To_TX_VAL01" create
+            exit
+        exit
+        vprn 1 customer 1 create
+            shutdown
+            vrf-import "Import_GPRS-GN"
+            router-id 10.19.11.128
+            autonomous-system 6306
+            route-distinguisher 6306:100171
+            auto-bind mpls
+        exit
+        vpls 88 customer 1 create
+            description "SMS_XURA_MCO1"
+            allow-ip-int-binding
+            stp
+                shutdown
+            exit
+            service-name "VPLS_SMS"
+            sap 10/2/23 create
+                description "PED77VAL01 - PED77VAL02"
+            exit
+            mesh-sdp 22:88 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vpls 100 customer 1 create
+            description "Interconexion L2 PTSVAL01"
+            allow-ip-int-binding
+            stp
+                shutdown
+            exit
+            service-name "VPLS-PTSVAL01"
+            sap 1/2/21 create
+                description "PED77VAL01 - PTSVAL01-mgmt1"
+            exit
+            mesh-sdp 114:100 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vpls 101 customer 1 create
+            description "Interconexion L2 PTSVAL02"
+            allow-ip-int-binding
+            stp
+                shutdown
+            exit
+            service-name "VPLS_PTSVAL01"
+            sap 1/2/22 create
+                description "PED77VAL01 - PTSVAL02-mgmt2"
+            exit
+            mesh-sdp 114:101 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vprn 150 customer 1 create
+            description "VOZ3GSM"
+            vrf-import "Import_VOZ3GSM-10044"
+            vrf-export "Export_VOZ3GSM"
+            autonomous-system 6306
+            route-distinguisher 6306:150
+            auto-bind mpls
+            interface "to_PS93VAL01_1/0/24-Vlan274-Gr" create
+                description "PED77VAL01_1/2/16-PS93VAL01_Gi1/0/24_vlan274-Gr-L3"
+                address 10.53.189.37/30
+                sap 1/2/16:274 create
+                exit
+            exit
+            interface "SMS_XURA_PTO24_SIGNALING" create
+                description "XURA_PTO24_SIGNALING"
+                address 10.19.214.230/29
+                sap 10/2/18 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "to_PS93VAL01_1/0/24-Vlan274-Gr"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            no shutdown
+        exit
+        vpls 200 customer 1 create
+            description "DPI_SRPVAL01_Em0_O&M"
+            allow-ip-int-binding
+            stp
+                shutdown
+            exit                      
+            service-name "DPI_SRP_O&M"
+            sap 1/2/18 create
+                description "PED77VAL01 - SRPVAL01_Em0"
+            exit
+            mesh-sdp 114:200 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vpls 201 customer 1 create
+            description "DPI_SRPVAL01_Em0_RADIUS"
+            allow-ip-int-binding
+            stp
+                shutdown
+            exit
+            service-name "DPI_SRP_RADIUS"
+            sap 1/2/19 create
+                description "PED77VAL01 - SRPVAL02_Em1"
+            exit
+            mesh-sdp 114:201 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vpls 208 customer 1 create
+            description "DPI_SDEVAL_RADIUS"
+            allow-ip-int-binding
+            stp
+                shutdown
+            exit
+            service-name "DPI_SDE_RADIUS"
+            sap 1/2/14 create
+                description "PED77VAL01 - SDEVAL02_Eth3"
+            exit
+            sap 1/2/15 create
+                description "PED77VAL01 - SDEVAL01_Eth1"
+            exit
+            mesh-sdp 114:208 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vpls 255 customer 1 create
+            description "DPI_SDEVAL02_Eth0_O&M"
+            allow-ip-int-binding
+            stp
+                shutdown
+            exit
+            service-name "DPI_SDE_O&M1"
+            sap 1/2/17 create
+                description "PED77VAL02 - SDEVAL01_Eth0"
+            exit
+            sap 1/2/20 create
+                description "PED77VAL02 - SDEVAL01_Eth2"
+            exit                      
+            mesh-sdp 114:255 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vpls 300 customer 1 create
+            allow-ip-int-binding
+            stp
+                no shutdown
+            exit
+            service-name "VPLS-DNSVAL01-TRAFICO"
+            sap 10/2/19 create
+            exit
+            sap 10/2/20 create
+            exit
+            mesh-sdp 114:300 create
+                no shutdown
+            exit
+            no shutdown
+        exit
+        vprn 10000 customer 1 create
+            description "Servicio OAMGSM"
+            autonomous-system 6306
+            route-distinguisher 6306:10000
+            auto-bind mpls
+            vrf-target target:6306:10000
+            interface "to_PS93VAL01_1/0/25-Vlan270_OYM" create
+                description "PED77VAL01_10/2/16-PS93VAL01_Gi1/0/25_vlan270-OYM-L3"
+                address 10.53.189.1/30
+                sap 10/2/16:270 create
+                exit
+            exit
+            interface "DNSVAL01-GESTION" create
+                description "PED77VAL01_10/2/21-DNSVAL01-GESTION"
+                address 10.18.109.17/30
+                sap 10/2/21 create
+                exit
+            exit
+            interface "prueba" create
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                area 0.0.0.1
+                    nssa
+                    exit
+                    interface "to_PS93VAL01_1/0/25-Vlan270_OYM"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "OAMGSM"     
+            no shutdown
+        exit
+        vprn 10020 customer 1 create
+            vrf-import "Import_3G-IuPS-GPRS-GN"
+            vrf-export "Export_3G-IuPS"
+            autonomous-system 6306
+            route-distinguisher 6306:10020
+            auto-bind mpls
+            interface "to_PS93VAL01_3/0/6-Vlan273-IuPs" create
+                description "PED77VAL01_3/1/2-PS93VAL01_Te3/0/6_vlan273-IuPs-L3"
+                address 10.53.189.25/30
+                sap 3/1/2:273 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan281-IuPs" create
+                description "PED77VAL01_8/1/2-PS93VAL01_Te3/0/6_vlan281-IuPs-L3"
+                address 10.53.189.173/30
+                sap 8/1/2:281 create
+                exit
+            exit
+            interface "VRF-3G-IuPS_RNCVAL02_Huawei" create
+                description "PED77VAL01_10/1/1-RNCVAL02_HUAWEI"
+                address 10.53.151.129/30
+                sap 10/1/1 create
+                exit
+            exit
+            interface "RNCVAL01" create
+            exit
+            interface "RNCVAL01_IuPs" create
+            exit
+            interface "PED77VAL01_1/1/5_RNCVAL01_IUPS" create
+                description "PED77VAL01_1/1/5-RNCVAL01_Huawei-IuPs"
+                address 10.18.236.241/30
+                sap 1/1/5 create
+                exit
+            exit
+            interface "PED77VAL01_1/1/7_RNCVAL01_IUPS" create
+                description "PED77VAL01_1/1/7-RNCVAL01_Huawei-IuPs"
+                address 10.18.236.249/30
+                sap 1/1/7 create
+                exit
+            exit
+            static-route 10.18.233.123/32 next-hop 10.18.236.242
+            static-route 10.18.233.125/32 next-hop 10.18.236.250
+            static-route 10.53.151.121/32 next-hop 10.53.151.130
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "Export_Default"
+                area 0.0.0.1
+                    nssa
+                        originate-default-route type-7
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan273-IuPs"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan281-IuPs"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "IuPS-3G"
+            no shutdown
+        exit
+        vprn 10021 customer 1 create
+            description "3G-AAA"
+            autonomous-system 6306
+            route-distinguisher 6306:10021
+            auto-bind mpls
+            vrf-target target:6306:10021
+            interface "to_PS93VAL01_3/0/6-Vlan285-Gi-Ra" create
+                description "PED77VAL01_3/1/2-PS93VAL01_3/0/6_vlan285 - Gi - Radius"
+                address 10.53.189.157/30
+                sap 3/1/2:285 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan278-Gi-Ra" create
+                description "PED77VAL01_8/1/2-PS93VAL02_3/0/7_vlan278 - Gi - Radius"
+                address 10.53.189.97/30
+                sap 8/1/2:278 create
+                exit
+            exit
+            interface "PED77VAL01 - SRPVAL02_RADIUS" create
+                address 10.18.108.50/29
+                bfd 201 receive 100 multiplier 3
+                vrrp 201
+                    backup 10.18.108.49
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                    bfd-enable 10021 interface "PED77VAL01 - SRVAL02_RADIUS " dst-ip 10.18.108.51
+                exit
+                vpls "DPI_SRP_RADIUS"
+                exit
+            exit
+            interface "PED77VAL01 - SDEVAL01_RADIUS" create
+                address 10.18.108.82/28
+                bfd 208 receive 100 multiplier 3
+                vrrp 208
+                    backup 10.18.108.81
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                    bfd-enable 10021 interface "PED77VAL01 - SDEVAL02-O&M" dst-ip 10.18.108.83
+                exit
+                vpls "DPI_SDE_RADIUS" 
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan285-Gi-Ra"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan278-Gi-Ra"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "AAA-3G"
+            no shutdown
+        exit
+        vprn 10026 customer 1 create
+            description "3G-GbIP"
+            autonomous-system 6306
+            route-distinguisher 6306:10026
+            auto-bind mpls
+            vrf-target target:6306:10026
+            interface "to_PS93VAL01_3/0/6-Vlan272-GbIP" create
+                description "PED77VAL01_3/1/2-PS93VAL01_Te3/0/6_vlan272-Gb-L3"
+                address 10.53.189.13/30
+                sap 3/1/2:272 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan280-GbIP" create
+                description "PED77VAL01_8/1/2-PS93VAL01_Te3/0/6_vlan280-Gb-L3"
+                address 10.53.189.165/30
+                sap 8/1/2:280 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan272-GbIP"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown   
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan280-GbIP"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "GbIP-3G"
+            no shutdown
+        exit
+        vprn 10050 customer 1 create
+            shutdown
+            description "GESTION-DPI"
+            vrf-import "GESTION-DPI-IMPORT"
+            vrf-export "GESTION-DPI-EXPORT"
+            router-id 10.19.11.128
+            autonomous-system 6306
+            auto-bind mpls
+        exit
+        vprn 10076 customer 1 create
+            description "GPRS-Gi Interna Interface-VAL"
+            vrf-import "Import_GPRS-Gi-Interna-VAL-10250"
+            vrf-export "Export_GPRS-Gi-Interna-VAL"
+            autonomous-system 6306
+            route-distinguisher 6306:10076
+            auto-bind mpls
+            interface "to_PS93VAL01_3/0/6-Vlan284-Gi-Se" create
+                description "PED77VAL01_3/1/2-PS93VAL01_3/0/6_vlan284-Gi-Servicios"
+                address 10.53.189.149/30
+                sap 3/1/2:284 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan277-Gi-Se" create
+                description "PED77VAL01_8/1/2-PS93VAL02_3/0/7_vlan277-Gi-Servicios"
+                address 10.53.189.85/30
+                sap 8/1/2:277 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan284-Gi-Se"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan277-Gi-Se"
+                        interface-type point-to-point
+                        metric 6000   
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "GPRS-Gi_Interna-VAL"
+            no shutdown
+        exit
+        vprn 10077 customer 1 create
+            description "Gi-Navegantes Interface VAL"
+            vrf-import "Import_3G-Gi-NAVE-VAL-10246"
+            vrf-export "Export_3G-Gi-NAVEGANTES-VAL"
+            autonomous-system 6306
+            route-distinguisher 6306:10013
+            auto-bind mpls
+            vrf-target target:6306:10013
+            interface "to_PS93VAL01_3/0/6-Vlan283-Gi-Na" create
+                description "PED77VAL01_3/1/2-PS93VAL01_3/0/6_vlan283-Gi-Navegantes"
+                address 10.53.189.141/30
+                sap 3/1/2:283 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan276-Gi-Na" create
+                description "PED77VAL01_8/1/2-PS93VAL02_3/0/7_vlan276-Gi-Navegantes"
+                address 10.53.189.73/30
+                sap 8/1/2:276 create
+                exit
+            exit
+            interface "PTSVAL01_1_3/1_4_GISERV_V2" create
+                address 10.18.108.125/30
+                bfd 300 receive 300 multiplier 3
+                sap lag-30:67 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                ignore-dn-bit
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan283-Gi-Na"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan276-Gi-Na"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+                area 0.0.0.2
+                    interface "PTSVAL01_1_3/1_4_GISERV_V2"
+                        bfd-enable 
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "Gi-3G"
+            no shutdown
+        exit
+        vprn 10275 customer 1 create
+            description "DIAMETER_SMS"
+            vrf-import "IMPORT_SMS_TRAFICO_DIAMETER"
+            vrf-export "EXPORT_SMS_TRAFICO_DIAMETER"
+            autonomous-system 6306
+            route-distinguisher 6306:10275
+            auto-bind mpls
+            vrf-target target:6306:10275
+            interface "SMS_XURA_PED77VAL01 - PED77VAL02" create
+                address 10.19.215.189/28
+                bfd 100 receive 100 multiplier 3
+                vrrp 88
+                    backup 10.19.215.190
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                    bfd-enable 10275 interface "PED77VAL01 - PED77VAL02" dst-ip 10.19.215.188
+                exit
+                vpls "VPLS_SMS"
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "SMS_XURA_PED77VAL01 - PED77VAL02"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "DIAMETER"
+            no shutdown
+        exit
+        vprn 20016 customer 1 create
+            description "GPRS-GA"
+            autonomous-system 6306
+            route-distinguisher 6306:20016
+            auto-bind mpls
+            vrf-target target:6306:10016
+            interface "to_PS93VAL01_1/0/24-Vlan271-Ga" create
+                description "PED77VAL01_1/2/16-PS93VAL01_Gi1/0/24_vlan271-Ga-L3"
+                address 10.53.189.49/30
+                sap 1/2/16:271 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "MPBGP_Direct-to-OSPF"
+                area 0.0.0.1
+                    nssa
+                        no summaries
+                    exit
+                    interface "to_PS93VAL01_1/0/24-Vlan271-Ga"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "GPRS-GA"
+            no shutdown
+        exit
+        vprn 20017 customer 1 create
+            description "GPRS-GN"
+            vrf-import "Import_GPRS-GN"
+            vrf-export "Export_GPRS-GN"
+            autonomous-system 6306
+            route-distinguisher 6306:10017
+            auto-bind mpls
+            interface "to_PS93VAL01_3/0/6-Vlan275-Gn" create
+                description "PED77VAL01_3/1/2-PS93VAL01_3/0/6_vlan275-Gn-L3"
+                address 10.53.189.61/30
+                sap 3/1/2:275 create
+                exit
+            exit
+            interface "to_PS93VAL01_3/0/6-Vlan286-S1u" create
+                description "PED77VAL01_3/1/2-PS93VAL01_3/0/6_vlan286 - S1u-L3"
+                address 10.53.189.121/30
+                sap 3/1/2:286 create
+                exit
+            exit
+            interface "to_PS93VAL01_3/0/6-Vlan279-Gn" create
+                description "PED77VAL01_3/1/2-PS93VAL01_3/0/6_vlan279-S1MME-L3"
+                address 10.53.189.109/30
+                sap 3/1/2:279 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan282-Gn" create
+                description "PED77VAL01_8/1/2-PS93VAL02_3/0/7_vlan282-Gn-L3"
+                address 10.53.189.133/30
+                sap 8/1/2:282 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan287-S1u" create
+                description "PED77VAL01_8/1/2-PS93VAL02_3/0/7_vlan287 - S1u-L3"
+                address 10.53.189.181/30
+                sap 8/1/2:287 create
+                exit
+            exit
+            interface "to_PS93VAL02_3/0/7-Vlan288-Gn" create
+                description "PED77VAL01_8/1/2-PS93VAL02_3/0/7_vlan288-S1MME-L3"
+                address 10.53.189.189/30
+                sap 8/1/2:288 create
+                exit
+            exit
+            interface "DNSVAL01-LAN1-TRAFICO-Vpls300" create
+                description "VPLS300-DNSVAL01-LAN1"
+                address 10.18.74.46/28
+                vrrp 99
+                    backup 10.18.74.42
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                exit
+                vpls "VPLS-DNSVAL01-TRAFICO"
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "Export_Default"
+                area 0.0.0.1
+                    nssa
+                        originate-default-route type-7
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan275-Gn"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan286-S1u"
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL01_3/0/6-Vlan279-Gn"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan282-Gn"
+                        shutdown
+                        interface-type point-to-point
+                        metric 6000
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan287-S1u"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "to_PS93VAL02_3/0/7-Vlan288-Gn"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                    interface "DNSVAL01-LAN1-TRAFICO-Vpls300"
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "GPRS-Gn"
+            no shutdown
+        exit
+        vprn 20247 customer 1 create
+            description "CONTACT-CENTER"
+            vrf-import "Import_DM-COL_DM-MCY"
+            vrf-export "Export_CONTACT-to-OAMGSM"
+            router-id 10.18.198.165
+            autonomous-system 6306
+            route-distinguisher 6306:20247
+            auto-bind mpls
+            vrf-target target:6306:20247
+            interface "VAL01_3/1/8-SW1_CONTACT-C-DATOS" create
+                address 10.18.198.165/30
+                sap 3/1/8:25 create
+                exit
+            exit
+            interface "VAL01_8/1/5-SW2_CONTACT-C-DATOS" create
+                address 10.18.198.169/30
+                sap 8/1/5:26 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                area 0.0.0.7
+                    interface "VAL01_3/1/8-SW1_CONTACT-C-DATOS"
+                        interface-type point-to-point
+                        no shutdown
+                    exit
+                    interface "VAL01_8/1/5-SW2_CONTACT-C-DATOS"
+                        interface-type point-to-point
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "CONTACT-CENTER-DATOS"
+            no shutdown
+        exit
+        vprn 20252 customer 1 create
+            description "SANIDAD_TEST"
+            vrf-export "EXPORT_LOOPBACK250-SANIDAD_TEST"
+            autonomous-system 6306
+            route-distinguisher 6306:20252
+            auto-bind mpls
+            vrf-target target:6306:20252
+            interface "loopback250" create
+                address 10.18.219.36/32
+                loopback
+            exit
+            no shutdown
+        exit
+        vprn 58001 customer 1 create
+            description "GESTION-DPI"
+            vrf-import "GESTION-DPI-IMPORT"
+            vrf-export "GESTION-DPI-EXPORT"
+            router-id 10.19.11.128
+            autonomous-system 6306
+            route-distinguisher 6306:58001
+            auto-bind mpls
+            vrf-target target:6306:58001
+            interface "PED77VAL01 - PTSVAL01_mgmt1" create
+                address 10.18.108.34/29
+                bfd 100 receive 100 multiplier 3
+                vrrp 100
+                    backup 10.18.108.33
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                    bfd-enable 58001 interface "PED77VAL01 - PTSVAL01-mgmt1" dst-ip 10.18.108.35
+                exit
+                vpls "VPLS-PTSVAL01"
+                exit
+            exit
+            interface "PED77VAL01 - PTSVAL02-mgmt2" create
+                address 10.18.108.42/29
+                bfd 101 receive 100 multiplier 3
+                vrrp 101
+                    backup 10.18.108.41
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                    bfd-enable 58001 interface "PED77VAL01 - PTSVAL02-mgmt2" dst-ip 10.18.108.43
+                exit
+                vpls "VPLS_PTSVAL01"
+                exit
+            exit
+            interface "PED77VAL01 - SRPVAL01_O&M" create
+                address 10.18.108.66/28
+                bfd 200 receive 100 multiplier 3
+                vrrp 200
+                    backup 10.18.108.65
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                    bfd-enable 58001 interface "PED77VAL01 - SRPVAL02-O&M" dst-ip 10.18.108.67
+                exit
+                vpls "DPI_SRP_O&M"
+                exit
+            exit
+            interface "PED77VAL01 - SDEVAL01_O&M" create
+                address 10.18.108.194/28
+                bfd 255 receive 100 multiplier 3
+                vrrp 255
+                    backup 10.18.108.193
+                    ping-reply
+                    telnet-reply
+                    ssh-reply
+                    bfd-enable 58001 interface "PED77VAL01 - SDEVAL02-O&M" dst-ip 10.18.108.195
+                exit
+                vpls "DPI_SDE_O&M1"
+                exit
+            exit
+            service-name "GESTION-DPI"
+            no shutdown
+        exit
+        vprn 70003 customer 1 create
+            vrf-import "Import_PACO_LTE"
+            vrf-export "Export_eNODEB_VAL"
+            autonomous-system 6306
+            route-distinguisher 6306:70003
+            auto-bind mpls
+            interface "To_TX_VAL01" create
+                address 10.18.109.65/30
+                sap 8/2/10 create
+                exit
+            exit
+            bgp
+                group "TX_Valencia"
+                    family ipv4
+                    loop-detect off
+                    type external
+                    local-as 65212
+                    peer-as 65112
+                    neighbor 10.18.109.66
+                        description "VMTSOVANE4001_6/0/0"
+                        import "Import_eNODEB_VAL" 
+                        export "Export_PACO_LTE" 
+                    exit
+                exit
+                no shutdown
+            exit
+            service-name "IX-LTE-NB"
+            no shutdown
+        exit
+    exit
+#--------------------------------------------------
+echo "Router (Service Side) Configuration"
+#--------------------------------------------------
+    router 
+#--------------------------------------------------
+echo "OSPFv2 Configuration"
+#--------------------------------------------------
+        ospf 10.19.11.128
+        exit
+#--------------------------------------------------
+echo "Policy Configuration"
+#--------------------------------------------------
+        policy-options
+            begin
+            prefix-list "GPRS-GN"
+                prefix 10.53.187.188/32 exact
+                prefix 10.53.187.189/32 exact
+                prefix 10.53.187.190/32 exact
+                prefix 55.55.55.55/32 exact
+                prefix 66.66.66.66/32 exact
+            exit
+            prefix-list "PRUEBA_PC"
+                prefix 10.160.15.56/32 exact
+                prefix 10.160.16.191/32 exact
+            exit
+            prefix-list "GESTION-DPI"
+                prefix 10.18.108.32/29 longer
+                prefix 10.18.108.40/29 longer
+            exit
+            prefix-list "Default_Route"
+                prefix 0.0.0.0/0 exact
+            exit
+            prefix-list "CONTACT-CENTER"
+                prefix 10.18.31.64/27 exact
+            exit
+            prefix-list "GESTION-DPI_SDE"
+                prefix 10.18.108.192/28 exact
+            exit
+            prefix-list "GESTION-DPI_SRP"
+                prefix 10.18.108.48/29 longer
+                prefix 10.18.108.64/28 longer
+            exit
+            prefix-list "VOZ3GSM_Static-Routes"
+                prefix 10.19.5.112/29 exact
+            exit
+            prefix-list "PREFIX_LOOPBACK250-SANIDAD_TEST"
+                prefix 10.18.219.36/32 exact
+            exit
+            community "IuPS" members "target:6306:10020"
+            community "10044" members "target:6306:10044"
+            community "10113" members "target:6306:10113"
+            community "10246" members "target:6306:10246"
+            community "10250" members "target:6306:10250"
+            community "3G-AAA" members "target:6306:10038"
+            community "DM-COL" members "target:6306:10166"
+            community "DM-MCY" members "target:6306:10167"
+            community "OAMGSM" members "target:6306:10000"
+            community "CORE_TI" members "target:6306:20248"
+            community "GPRS-GN" members "target:6306:10017"
+            community "VOZ3GSM" members "target:6306:150"
+            community "3G-AAA-2" members "target:6306:10021"
+            community "DIAMETER" members "target:6306:10275"
+            community "PACO_LTE" members "target:6306:70010"
+            community "eNODEB_BTO" members "target:6306:70004"
+            community "eNODEB_CAN" members "target:6306:70000"
+            community "eNODEB_COL" members "target:6306:70001"
+            community "eNODEB_MBO" members "target:6306:70005"
+            community "eNODEB_PLC" members "target:6306:70002"
+            community "eNODEB_VAL" members "target:6306:70003"
+            community "CALL-CENTER" members "target:6306:20178"
+            community "GESTION-DPI" members "target:6306:10021" "target:6306:58001"
+            community "GESTION-PTS" members "target:6306:10000" "target:6306:10038" "target:6306:58001"
+            community "eNODEB_TEST" members "target:6306:88888"
+            community "CONTACT-CENTER" members "target:6306:20247"
+            community "CONTACT_OAMGSM" members "target:6306:10000" "target:6306:20247"
+            community "GPRS_GN-PACO_LTE" members "target:6306:10017" "target:6306:70010"
+            community "VOZ-CONTACT_CENTER" members "target:6306:58017"
+            community "GPRS-Gi-Interna-VAL" members "target:6306:10076"
+            community "3G-Gi-NAVEGANTES-VAL" members "target:6306:10013"
+            community "SANIDAD_TEST-3G_BILLING" members "target:6306:10025"
+            policy-statement "Export-Default"
+                entry 10
+                    from
+                        prefix-list "Default_Route"
+                    exit
+                    to
+                        protocol ospf
+                    exit
+                    action accept
+                    exit
+                exit
+            exit
+            policy-statement "Export_3G-IuPS"
+                entry 5
+                    from
+                        protocol ospf
+                        prefix-list "Default_Route"
+                    exit
+                    action reject
+                exit
+                entry 10
+                    action accept
+                        community add "IuPS"
+                    exit
+                exit
+            exit
+            policy-statement "Export_Default"
+                entry 10
+                    from
+                        protocol bgp-vpn
+                        prefix-list "Default_Route"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Export_GPRS-GN"
+                entry 10
+                    from              
+                        prefix-list "GPRS-GN"
+                    exit
+                    action accept
+                        community add "GPRS_GN-PACO_LTE"
+                    exit
+                exit
+                entry 20
+                    action accept
+                        community add "GPRS-GN"
+                    exit
+                exit
+            exit
+            policy-statement "Export_VOZ3GSM"
+                entry 5
+                    from
+                        protocol ospf
+                        prefix-list "Default_Route"
+                    exit
+                    action reject
+                exit
+                entry 10
+                    from
+                        protocol ospf
+                    exit
+                    action accept
+                        community add "VOZ3GSM"
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                        community add "VOZ3GSM"
+                    exit
+                exit
+                entry 30
+                    from
+                        protocol bgp-vpn
+                        prefix-list "VOZ3GSM_Static-Routes"
+                    exit
+                    action accept
+                        community add "VOZ3GSM"
+                    exit
+                exit
+            exit
+            policy-statement "Import_GPRS-GN"
+                entry 10
+                    from
+                        community "eNODEB_CAN"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 20              
+                    from
+                        community "10113"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 30
+                    from
+                        community "GPRS-GN"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 40
+                    from
+                        community "eNODEB_VAL"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 50
+                    from
+                        community "eNODEB_COL"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 60
+                    from
+                        community "eNODEB_PLC"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 70
+                    from
+                        community "IuPS"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 80
+                    from
+                        community "eNODEB_MBO"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 90
+                    from
+                        community "eNODEB_BTO"
+                    exit
+                    action accept
+                    exit
+                exit                  
+                default-action reject
+            exit
+            policy-statement "Export_PACO_LTE"
+                entry 10
+                    from
+                        protocol bgp-vpn
+                        community "PACO_LTE"
+                    exit
+                    action accept
+                        as-path replace "Null_as-path"
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Import_PACO_LTE"
+                entry 10
+                    from
+                        protocol bgp-vpn
+                        community "PACO_LTE"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Export_eNODEB_VAL"
+                entry 10
+                    from
+                        protocol bgp
+                    exit
+                    action accept
+                        community add "eNODEB_VAL"
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol static
+                    exit
+                    action accept
+                        community add "eNODEB_VAL"
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Import_eNODEB_VAL"
+                entry 10
+                    from
+                    exit
+                    action accept
+                        community add "eNODEB_VAL"
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "GESTION-DPI-EXPORT"
+                entry 5
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                        community add "GESTION-PTS"
+                    exit
+                exit
+                entry 10
+                    from
+                        prefix-list "GESTION-DPI"
+                    exit
+                    action accept
+                        community add "GESTION-DPI"
+                    exit
+                exit
+                entry 15
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                        community add "GESTION-DPI"
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "GESTION-DPI-IMPORT"
+                entry 10
+                    from
+                        protocol bgp-vpn
+                        community "GESTION-DPI"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol bgp-vpn
+                        community "3G-AAA"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 23
+                    from
+                        protocol bgp-vpn
+                        community "CORE_TI"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 25
+                    from
+                        protocol bgp-vpn
+                        community "DIAMETER"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 30
+                    from
+                        protocol bgp-vpn
+                        community "OAMGSM"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 40
+                    from
+                        protocol bgp-vpn
+                        community "3G-AAA-2"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 50
+                    from
+                        protocol bgp-vpn
+                        prefix-list "PRUEBA_PC"
+                        community "DIAMETER"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Default-Ori-to-OSPF"
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 30
+                    from
+                        protocol bgp-vpn
+                        prefix-list "Default_Route"
+                    exit
+                    action accept
+                    exit
+                exit
+            exit
+            policy-statement "Import_DM-COL_DM-MCY"
+                entry 10
+                    from
+                        community "CONTACT-CENTER"
+                    exit
+                    action accept
+                    exit              
+                exit
+                entry 20
+                    from
+                        community "DM-COL"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 30
+                    from
+                        community "DM-MCY"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 35
+                    from
+                        community "CALL-CENTER"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 40
+                    from
+                        community "VOZ-CONTACT_CENTER"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Import_VOZ3GSM-10044"
+                entry 10
+                    from
+                        community "VOZ3GSM"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 20
+                    from
+                        community "10044"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "MPBGP_Direct-to-OSPF"
+                entry 10
+                    from
+                        protocol bgp-vpn
+                    exit
+                    action accept
+                    exit              
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 25
+                    from
+                        protocol bgp-vpn
+                        prefix-list "Default_Route"
+                    exit
+                    action accept
+                    exit
+                exit
+            exit
+            policy-statement "Import_3G-IuPS-GPRS-GN"
+                entry 10
+                    from
+                        community "IuPS"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 20
+                    from
+                        community "GPRS-GN"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Export_CONTACT-to-OAMGSM"
+                entry 10
+                    from
+                        prefix-list "CONTACT-CENTER"
+                    exit
+                    action accept
+                        community add "CONTACT_OAMGSM"
+                    exit
+                exit
+            exit
+            policy-statement "Export-CONTACT-to-VOZ3GSM"
+                entry 10
+                    from
+                        community "CONTACT-CENTER"
+                    exit
+                    action accept
+                    exit
+                exit
+            exit
+            policy-statement "Export_GPRS-Gi-Interna-VAL"
+                entry 10              
+                    from
+                        protocol ospf
+                    exit
+                    action accept
+                        community add "GPRS-Gi-Interna-VAL"
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                        community add "GPRS-Gi-Interna-VAL"
+                    exit
+                exit
+                entry 30
+                    from
+                        protocol static
+                    exit
+                    action accept
+                        community add "GPRS-Gi-Interna-VAL"
+                    exit
+                exit
+            exit
+            policy-statement "EXPORT_SMS_TRAFICO_DIAMETER"
+                entry 10
+                    from
+                        protocol ospf
+                    exit
+                    action accept
+                        community add "DIAMETER"
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                        community add "DIAMETER"
+                    exit
+                exit
+            exit
+            policy-statement "Export_3G-Gi-NAVEGANTES-VAL"
+                entry 10
+                    from
+                        protocol ospf
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-VAL"
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit              
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-VAL"
+                    exit
+                exit
+            exit
+            policy-statement "IMPORT_SMS_TRAFICO_DIAMETER"
+                entry 10
+                    from
+                        community "DIAMETER"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 20
+                    from
+                        community "10275"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "Import_3G-Gi-NAVE-VAL-10246"
+                entry 10
+                    from
+                        community "3G-Gi-NAVEGANTES-VAL"
+                    exit
+                    action accept
+                    exit
+                exit
+                entry 20
+                    from
+                        community "10246"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            policy-statement "EXPORT_LOOPBACK250-SANIDAD_TEST"
+                entry 10
+                    from
+                        prefix-list "PREFIX_LOOPBACK250-SANIDAD_TEST"
+                    exit
+                    action accept
+                        community add "SANIDAD_TEST-3G_BILLING"
+                    exit
+                exit
+            exit
+            policy-statement "Import_GPRS-Gi-Interna-VAL-10250"
+                entry 10
+                    from
+                        community "GPRS-Gi-Interna-VAL"
+                    exit
+                    action accept     
+                    exit
+                exit
+                entry 20
+                    from
+                        community "10250"
+                    exit
+                    action accept
+                    exit
+                exit
+                default-action reject
+            exit
+            commit
+        exit
+#--------------------------------------------------
+echo "BGP Configuration"
+#--------------------------------------------------
+        bgp
+            vpn-apply-import
+            vpn-apply-export
+            graceful-restart
+            exit
+            loop-detect off
+            router-id 10.19.11.128
+            enable-peer-tracking
+            group "iBGP-RR"
+                description "Cliente-RouteReflector"
+                family ipv4 vpn-ipv4
+                authentication-key "ww0Ugn/l7sryND2Dl.KzMtRPWMCEuUzn1FMVCid.U4U" hash2
+                type internal
+                local-as 6306
+                peer-as 6306
+                neighbor 10.19.11.106
+                exit
+                neighbor 10.19.11.124
+                exit
+            exit
+            no shutdown
+        exit
+    exit
+
+#--------------------------------------------------
+echo "System Time NTP Configuration"
+#--------------------------------------------------
+    system
+        time
+            ntp
+            exit
+        exit
+    exit
+
+exit all
+
+# Finished TUE MAY 28 06:50:44 2019 UTC
+*A:PED77VAL01#                
+*A:PED77VAL01# 
+*A:PED77VAL01# configure 
+*A:PED77VAL01>config# service 
+*A:PED77VAL01>config>service# vprn 10327 customer 1 create 
+*A:PED77VAL01>config>service>vprn$             router-id 10.19.11.128 
+*A:PED77VAL01>config>service>vprn$             autonomous-system 6306 
+*A:PED77VAL01>config>service>vprn$             route-distinguisher 6306:10056 
+*A:PED77VAL01>config>service>vprn$             auto-bind mpls 
+*A:PED77VAL01>config>service>vprn$             vrf-target target:6306:10056 
+*A:PED77VAL01>config>service>vprn$             interface "PTSVAL01_1_3/1_4_GINAV_V2" create 
+*A:PED77VAL01>config>service>vprn>if$                 address 10.18.108.121/30 
+*A:PED77VAL01>config>service>vprn>if$                 bfd 300 receive 300 multiplier 3 
+*A:PED77VAL01>config>service>vprn>if$                 sap lag-30:66 create 
+*A:PED77VAL01>config>service>vprn>if>sap$                 exit 
+*A:PED77VAL01>config>service>vprn>if$             exit 
+*A:PED77VAL01>config>service>vprn$             ospf 
+*A:PED77VAL01>config>service>vprn>ospf$                 vpn-tag 6306 
+*A:PED77VAL01>config>service>vprn>ospf$                 export "Default-Ori-to-OSPF"
+*A:PED77VAL01>config>service>vprn>ospf$                 ignore-dn-bit 
+*A:PED77VAL01>config>service>vprn>ospf$                 area 0.0.0.2 
+*A:PED77VAL01>config>service>vprn>ospf>area$                     interface "PTSVAL01_1_3/1_4_GINAV_V2"
+*A:PED77VAL01>config>service>vprn>ospf>area>if$                         bfd-enable 
+*A:PED77VAL01>config>service>vprn>ospf>area>if$                         no shutdown 
+*A:PED77VAL01>config>service>vprn>ospf>area>if$                     exit 
+*A:PED77VAL01>config>service>vprn>ospf>area$                 exit 
+*A:PED77VAL01>config>service>vprn>ospf$             exit 
+*A:PED77VAL01>config>service>vprn$             service-name "GI_NAV_V2"
+*A:PED77VAL01>config>service>vprn$             no shutdown 
+*A:PED77VAL01>config>service>vprn$ exit 
+*A:PED77VAL01>config>service# exit 
+*A:PED77VAL01>config# exit 
+*A:PED77VAL01# 
+*A:PED77VAL01# 
+*A:PED77VAL01# configure 
+*A:PED77VAL01>config# service 
+*A:PED77VAL01>config>service#      
+ [no] apipe           + Provision an ATM-Pipe Service
+ [no] cpipe           + Provision a Circuit Emulation Pipe Service
+ [no] customer        + Provision a customer
+ [no] egress-multica* + Create an Egress Multicast Group
+ [no] epipe           + Provision an Ether-Pipe Service
+ [no] fpipe           + Provision a FR-Pipe Service
+ [no] ies             + Provision an Internet Enhanced Service
+ [no] ipfix           + Configure IP Flow Information Export protocol
+ [no] ipipe           + Provision an IP-Pipe Service
+      mac-notificati* + Configure settings for MAC-notification messages
+      mrp             + Manage the mrp-policies
+      nat             + Configure Network Address Translation
+ [no] oper-group      + Configure a Operational-Group information
+      pbb             + Configure global PBB parameters
+ [no] pe-discovery-p* + Configure Provider Edge Discovery Policy
+      pw-routing      + Configure pseudowire routing parameters
+ [no] pw-template     + Configure a pseudowire template policy
+ [no] sdp             + Provision a SDP
+      template        + Configure service templates
+ [no] vpls            + Provision a Virtual Private LAN Service
+ [no] vprn            + Provision a VPRN Service
+
+*A:PED77VAL01>config>service# exit 
+*A:PED77VAL01>config# router 
+*A:PED77VAL01>config>router# policy-options 
+*A:PED77VAL01>config>router>policy-options# begin            
+*A:PED77VAL01>config>router>policy-options# no policy-statement "MPBGP_Direct-to-OSPF"
+*A:PED77VAL01>config>router>policy-options# commit 
+*A:PED77VAL01>config>router>policy-options# exit 
+*A:PED77VAL01>config>router# policy-options 
+*A:PED77VAL01>config>router>policy-options# begin 
+*A:PED77VAL01>config>router>policy-options# policy-statement "MPBGP_Direct-to-OSPF"
+*A:PED77VAL01>config>router>policy-options>policy-statement$                 entry 10 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry$                     from 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry>from$                         protocol bgp-vpn 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry>from$                     exit 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry$                     action accept 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry>action$                     exit 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry$                 exit 
+*A:PED77VAL01>config>router>policy-options>policy-statement$                 entry 20 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry$                     from 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry>from$                         protocol direct 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry>from$                     exit 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry$                     action accept 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry>action$                     exit 
+*A:PED77VAL01>config>router>policy-options>policy-statement>entry$                 exit 
+*A:PED77VAL01>config>router>policy-options>policy-statement$             exit 
+*A:PED77VAL01>config>router>policy-options# 
+*A:PED77VAL01>config>router>policy-options# 
+*A:PED77VAL01>config>router>policy-options# 
+*A:PED77VAL01>config>router>policy-options# exit 
+*A:PED77VAL01>config>router# exit 
+*A:PED77VAL01>config# exit 
+*A:PED77VAL01# 

@@ -1,0 +1,284 @@
+
+
+
+
+configure  service 
+vprn 10071 customer 1
+interface "PTSCOL01_1_10/1_12_GINAV_V2"
+shutdown
+sap lag-30:66
+shutdown
+exit
+no sap lag-30:66
+exit
+no interface "PTSCOL01_1_10/1_12_GINAV_V2"
+
+
+
+
+configure router policy begin no polic "Export_OSPF-GI-Balanceo"
+configure router policy begin no polic "Export_3G-Gi-NAVEGANTES-COL"
+
+
+
+
+policy-statement "Export_OSPF-GI-Balanceo"
+                entry 4
+                    from
+                        prefix-list "Direct-ER-Downlink"
+                    exit
+                    action accept
+                        community add "DM-COL"
+                    exit
+                exit
+                entry 5
+                    from
+                        protocol ospf
+                        prefix-list "Balanceo"
+                    exit
+                    to
+                        protocol bgp-vpn
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-CAN"
+                        local-preference 300
+                    exit
+                exit
+                entry 8
+                    from
+                        protocol ospf
+                        prefix-list "Direct-ER-Downlink"
+                    exit
+                    action accept
+                        community add "DM-COL"
+                    exit
+                exit
+                entry 10
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-CAN"
+                    exit
+                exit
+                default-action reject
+            exit
+
+
+policy-statement "Export_3G-Gi-NAVEGANTES-COL"
+                entry 10
+                    from
+                        protocol ospf
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-COL"
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-COL"
+                    exit
+                exit
+                entry 30
+                    from
+                        protocol static
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-COL"
+                    exit
+                exit
+            exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GI_NAV_V2 INICIAL
+GI_NAV_V2 INICIAL
+
+
+
+vprn 10327 customer 1 create
+            vrf-import "Import_OSPF-GI-Balanceo"
+            vrf-export "Export_OSPF-GI-Balanceo"
+            router-id 10.19.11.113
+            autonomous-system 6306
+            route-distinguisher 6306:10056
+            auto-bind mpls
+            vrf-target target:6306:10056
+            interface "PTSCOL01_1_10/1_12_GINAV_V2" create
+                address 10.19.144.33/30
+                bfd 300 receive 300 multiplier 3
+                sap lag-30:66 create
+                exit
+            exit
+            nostatic-route 10.20.0.0/17 next-hop 10.19.144.34
+            static-route 10.20.128.0/17 next-hop 10.19.144.34
+            static-route 10.22.0.0/17 next-hop 10.19.144.34
+            static-route 10.22.128.0/17 next-hop 10.19.144.34
+            static-route 10.23.0.0/17 next-hop 10.19.144.34
+            static-route 10.23.128.0/17 next-hop 10.19.144.34
+            static-route 10.79.0.0/17 next-hop 10.19.144.34
+            static-route 10.79.128.0/17 next-hop 10.19.144.34
+            static-route 10.195.0.0/17 next-hop 10.19.144.34
+            static-route 10.195.128.0/17 next-hop 10.19.144.34
+            static-route 10.202.0.0/17 next-hop 10.19.144.34
+            static-route 10.212.0.0/17 next-hop 10.19.144.34
+            static-route 10.223.128.0/17 next-hop 10.19.144.34
+            ospf
+                vpn-tag 6306
+                export "Default-Ori-to-OSPF"
+                ignore-dn-bit
+                area 0.0.0.2
+                    interface "PTSCOL01_1_10/1_12_GINAV_V2"
+                        bfd-enable 
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "GI_NAV_V2"
+            no shutdown               
+        exit
+
+policy-statement "Export_OSPF-GI-Balanceo"
+                entry 4
+                    from
+                        prefix-list "Direct-ER-Downlink"
+                    exit
+                    action accept
+                        community add "DM-COL"
+                    exit
+                exit
+                entry 5
+                    from
+                        protocol ospf
+                        prefix-list "Balanceo"
+                    exit
+                    to
+                        protocol bgp-vpn
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-CAN"
+                        local-preference 300
+                    exit
+                exit
+                entry 8
+                    from
+                        protocol ospf
+                        prefix-list "Direct-ER-Downlink"
+                    exit
+                    action accept
+                        community add "DM-COL"
+                    exit
+                exit
+                entry 10
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-CAN"
+                    exit
+                exit
+                default-action reject
+            exit
+
+
+
+Gi-3G INICIAL
+Gi-3G INICIAL
+
+
+
+
+
+        vprn 10071 customer 1 create
+            description "Gi-Navegantes Interface COL"
+            vrf-import "Import_3G-Gi-NAVE-COL-10025"
+            vrf-export "Export_3G-Gi-NAVEGANTES-COL"
+            router-id 10.19.11.113
+            autonomous-system 6306
+            route-distinguisher 6306:10013
+            auto-bind mpls
+            vrf-target target:6306:10013
+            interface "to_PS93COL01_1/0/6-Vlan276-Gi-Na" create
+                description "PED77COL03_3/1/5-PS93COL01_1/0/6_vlan276-Gi-Navegantes"
+                address 10.53.114.73/30
+                sap 3/1/5:276 create
+                exit
+            exit
+            interface "PTS_TEST_CAN" create
+                address 10.19.214.217/30
+                bfd 300 receive 300 multiplier 3
+                sap lag-30:99 create
+                exit                  
+            exit
+            interface "PTSCOL01_1_10/1_12_GISERV_V2" create
+                address 10.19.144.41/30
+                bfd 300 receive 300 multiplier 3
+                sap lag-30:67 create
+                exit
+            exit
+            ospf
+                vpn-tag 6306
+                external-preference 180
+                export "Default-Ori-to-OSPF"
+                ignore-dn-bit
+                area 0.0.0.1
+                    interface "to_PS93COL01_1/0/6-Vlan276-Gi-Na"
+                        interface-type point-to-point
+                        metric 6000
+                        no shutdown
+                    exit
+                exit
+                area 0.0.0.2
+                    interface "PTS_TEST_CAN"
+                        bfd-enable 
+                        no shutdown
+                    exit
+                    interface "PTSCOL01_1_10/1_12_GISERV_V2"
+                        bfd-enable 
+                        no shutdown
+                    exit
+                exit
+            exit
+            service-name "Gi-3G"
+            no shutdown
+
+
+            policy-statement "Export_3G-Gi-NAVEGANTES-COL"
+                entry 10
+                    from
+                        protocol ospf
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-COL"
+                    exit
+                exit
+                entry 20
+                    from
+                        protocol direct
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-COL"
+                    exit
+                exit
+                entry 30
+                    from
+                        protocol static
+                    exit
+                    action accept
+                        community add "3G-Gi-NAVEGANTES-COL"
+                    exit
+                exit
+            exit
